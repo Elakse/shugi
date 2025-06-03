@@ -1,0 +1,97 @@
+[
+  {
+    "nombre": "Dragón Blanco de Ojos Azules",
+    "tipo": "MONSTRUO",
+    "ataque": 3000,
+    "defensa": 2500,
+    "nivel": 8,
+    "tipoMonstruo": "DRAGON",
+    "elemento": "LUZ"
+  },
+  {
+    "nombre": "Soldado Gigante de Piedra",
+    "tipo": "MONSTRUO",
+    "ataque": 1300,
+    "defensa": 2000,
+    "nivel": 4,
+    "tipoMonstruo": "ROCA",
+    "elemento": "TIERRA"
+  },
+  {
+    "nombre": "Mago Oscuro",
+    "tipo": "MONSTRUO",
+    "ataque": 2500,
+    "defensa": 2100,
+    "nivel": 7,
+    "tipoMonstruo": "LANZADOR_DE_CONJUROS",
+    "elemento": "OSCURIDAD"
+  },
+  {
+    "nombre": "Kuriboh",
+    "tipo": "MONSTRUO",
+    "ataque": 300,
+    "defensa": 200,
+    "nivel": 1,
+    "tipoMonstruo": "DEMONIO",
+    "elemento": "OSCURIDAD",
+    "efecto": {
+      "accion": "proteger_lp",
+      "cantidad": 1
+    }
+  },
+  {
+    "nombre": "Montaña",
+    "tipo": "MAGICA_CAMPO",
+    "efecto": {
+      "bonus": [
+        {"tipoMonstruo": "DRAGON", "atk": 200, "def": 200},
+        {"tipoMonstruo": "TRUENO", "atk": 200, "def": 200},
+        {"tipoMonstruo": "ROCA", "atk": 200, "def": 200}
+      ]
+    }
+  },
+  {
+    "nombre": "Bosque",
+    "tipo": "MAGICA_CAMPO",
+    "efecto": {
+      "bonus": [
+        {"tipoMonstruo": "INSECTO", "atk": 200, "def": 200},
+        {"tipoMonstruo": "PLANTA", "atk": 200, "def": 200},
+        {"tipoMonstruo": "BESTIA", "atk": 200, "def": 200}
+      ]
+    }
+  },
+  {
+    "nombre": "Mar",
+    "tipo": "MAGICA_CAMPO",
+    "efecto": {
+      "bonus": [
+        {"tipoMonstruo": "PEZ", "atk": 200, "def": 200},
+        {"tipoMonstruo": "SERPIENTE_MARINA", "atk": 200, "def": 200},
+        {"tipoMonstruo": "TRUENO", "atk": 200, "def": 200},
+        {"tipoMonstruo": "AQUA", "atk": 200, "def": 200}
+      ]
+    }
+  },
+  {
+    "nombre": "Raigeki",
+    "tipo": "MAGICA",
+    "efecto": {
+      "descripcion": "Destruye todos los monstruos del oponente."
+    }
+  },
+  {
+    "nombre": "Espadas de Luz Reveladora",
+    "tipo": "MAGICA",
+    "efecto": {
+      "descripcion": "El oponente no puede atacar durante 3 turnos."
+    }
+  },
+  {
+    "nombre": "Cilindro Mágico",
+    "tipo": "TRAMPA",
+    "efecto": {
+      "descripcion": "Niega el ataque y refleja el daño al oponente."
+    }
+  }
+]
