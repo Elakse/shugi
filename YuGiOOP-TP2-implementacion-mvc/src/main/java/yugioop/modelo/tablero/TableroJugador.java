@@ -2,6 +2,8 @@ package yugioop.modelo.tablero;
 
 import yugioop.modelo.carta.Carta;
 import yugioop.modelo.carta.CartaMonstruo;
+import yugioop.modelo.carta.CartaMagica;
+import yugioop.modelo.carta.CartaTrampa;
 import java.util.List;
 
 /**
@@ -11,6 +13,7 @@ import java.util.List;
 public class TableroJugador implements ITableroJugador {
     private ZonaMonstruos zonaMonstruos;
     private ZonaMagiaTrampa zonaMagiaTrampa;
+    private List<CartaMagica> cartasMagicasActivas;
 
     public TableroJugador() {
         this.zonaMonstruos = new ZonaMonstruos();
@@ -26,6 +29,46 @@ public class TableroJugador implements ITableroJugador {
     @Override
     public boolean colocarMonstruo(CartaMonstruo cartaM, int pos) {
         return this.zonaMonstruos.colocarCartaEnSlot(cartaM, pos);
+    }
+
+    @Override
+    public List<CartaMagica> obtenerCartasMagicasActivas() {
+        return this.cartasMagicasActivas;
+    }
+
+    @Override
+    public void agregarCartaMagicaActiva(CartaMagica cartaMagica){
+        cartasMagicasActivas.add(cartaMagica);
+    }
+
+    @Override
+    public void removerCartaMagicaActiva(CartaMagica cartaMagica){
+        cartasMagicasActivas.remove(cartaMagica);
+    }
+
+    @Override
+    public int obtenerPosicionMonstruo(CartaMonstruo monstruo) {
+        return this.zonaMonstruos.obtenerPosicionDeCarta(monstruo);
+    }
+
+    @Override
+    public CartaMonstruo obtenerCartaMonstruo(int pos){
+        return this.zonaMonstruos.obtenerCarta(pos);
+    }
+
+    @Override
+    public CartaMagica obtenerCartaMagica(int pos){
+        return this.zonaMagiaTrampa.obtenerCartaMagica(pos);
+    }
+    
+    @Override
+    public CartaTrampa obtenerCartaTrampa(int pos){
+        return this.zonaMagiaTrampa.obtenerCartaTrampa(pos);
+    }
+
+    @Override
+    public Carta obtenerCartaMagicaTrampa(int pos){
+        return this.zonaMagiaTrampa.obtenerCarta(pos);
     }
 
     /**
@@ -60,8 +103,8 @@ public class TableroJugador implements ITableroJugador {
      * @return La CartaMonstruo removida, o null si no había monstruo o la posición es inválida.
      */
     @Override
-    public CartaMonstruo removerMonstruo(int pos) {
-        return zonaMonstruos.removerCartaDeSlot(pos);
+    public void removerMonstruo(int pos) {
+        zonaMonstruos.removerCartaDeSlot(pos);
     }
 
     /**
@@ -90,23 +133,5 @@ public class TableroJugador implements ITableroJugador {
     @Override
     public boolean hayEspacioEnZonaMagiaTrampa() {
         return zonaMagiaTrampa.hayEspacioLibre();
-    }
-
-    /**
-     * Obtiene todos los monstruos actualmente en la zona de monstruos del jugador.
-     * @return Una lista de CartaMonstruo.
-     */
-    @Override
-    public List<CartaMonstruo> obtenerMonstruosEnCampo() {
-        return zonaMonstruos.obtenerOcupantes();
-    }
-
-    /**
-     * Obtiene todas las cartas mágicas y trampas actualmente en la zona de magia/trampa del jugador.
-     * @return Una lista de Carta.
-     */
-    @Override
-    public List<Carta> obtenerMagiasTrampasEnCampo() {
-        return zonaMagiaTrampa.obtenerOcupantes();
     }
 }

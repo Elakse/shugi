@@ -28,6 +28,7 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      * @param posicion Posición del slot (0-4).
      * @return La CartaMonstruo en el slot, o null si está vacío o fuera de rango.
      */
+    @Override
     public CartaMonstruo obtenerCarta(int posicion) {
         if (posicion >= 0 && posicion < CANTIDAD_SLOTS_MONSTRUO) {
             ICasillaTablero<CartaMonstruo> slot = this.slots[posicion];
@@ -42,6 +43,7 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      * Obtiene una lista de los monstruos ocupando los slots de la zona.
      * @return Lista de cartas de monstruo ocupantes.
      */
+    @Override
     public List<CartaMonstruo> obtenerOcupantes() { 
         List<CartaMonstruo> ocupantes = new ArrayList<>();
         for (ICasillaTablero<CartaMonstruo> slot : slots) {
@@ -72,6 +74,7 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      * @param posicion Posición del slot (0-4).
      * @return El ICasillaTablero correspondiente al slot, o null si la posición es inválida.
      */
+    @Override
     public ICasillaTablero<CartaMonstruo> getSlot(int posicion) {
         if (posicion >= 0 && posicion < CANTIDAD_SLOTS_MONSTRUO) {
             return this.slots[posicion];
@@ -96,6 +99,7 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      * Verifica si hay algún espacio libre en la zona de monstruos.
      * @return true si hay al menos un espacio libre, false si todos están ocupados.
      */
+    @Override
     public boolean hayEspacioLibre() {
         for (ICasillaTablero<CartaMonstruo> slot : slots) {
             if (slot.estaLibre()) {
@@ -104,11 +108,23 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
         }
         return false;
     }
+
+    @Override
+    public int obtenerPosicionDeCarta(CartaMonstruo carta){
+        for (int i = 0; i < CANTIDAD_SLOTS_MONSTRUO; i++) {
+            ICasillaTablero<CartaMonstruo> slot = this.slots[i];
+            if (!slot.estaLibre() && slot.getOcupante().equals(carta)) {
+                return i;
+            }
+        }
+        return -1; // Retorna -1 si la carta no se encuentra en ningún slot
+    }
     
     /**
      * Obtiene la cantidad de slots disponibles en la Zona de Monstruos.
      * @return La cantidad de slots disponibles.
      */
+    @Override
     public int getCantidadSlotsLibres() {
         int cantidadSlotsDisponibles = 0;
         for (ICasillaTablero<CartaMonstruo> slot : slots) {

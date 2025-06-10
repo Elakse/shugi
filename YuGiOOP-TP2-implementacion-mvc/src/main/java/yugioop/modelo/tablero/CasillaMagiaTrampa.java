@@ -32,25 +32,7 @@ public class CasillaMagiaTrampa extends CasillaBase<Carta> {
             return false;
         }
         
-        if (!(carta instanceof CartaMagica || carta instanceof CartaTrampa)) {
-            System.out.println("Error: Solo se pueden colocar Cartas Mágicas o Trampas en esta casilla.");
-            return false;
-        }
-        
         this.ocupante = carta;
-        
-        if (carta instanceof CartaTrampa) {
-            System.out.println("Trampa " + carta.getNombre() + " colocada boca abajo.");
-        } else if (carta instanceof CartaMagica) {
-            CartaMagica cartaMagica = (CartaMagica) carta;
-            if (cartaMagica.esDeTipoCampo()) {
-                System.out.println("Mágica de campo " + carta.getNombre() + " colocada. Debe ser enviada a la zona de campo para activarse.");
-            } else {
-                System.out.println("Mágica " + carta.getNombre() + " colocada.");
-                carta.revelar();
-            }
-        }
-        
         return true;
     }
 

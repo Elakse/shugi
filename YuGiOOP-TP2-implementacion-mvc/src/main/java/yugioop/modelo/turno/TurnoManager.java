@@ -6,29 +6,23 @@ public class TurnoManager {
     private Jugador jugadorActual;
     private Jugador jugadorOponente;
     private FaseTurno faseActual;
-    private int numeroTurnoGlobal;
-    private Jugador jugadorQueEmpezoPartida;
+    private int NumTurno;
+    private Jugador jugadorInicial;
     private boolean invocacionNormalRealizada;
     private boolean cartaCampoActivadaEsteTurno;
 
-    /**
-     * Constructor del TurnoManager.
-     * @param jugador1 El primer jugador.
-     * @param jugador2 El segundo jugador.
-     * @param jugador1Comienza true si el jugador 1 comienza, false si el jugador 2 comienza.
-     */
     public TurnoManager(Jugador jugador1, Jugador jugador2, boolean jugador1Comienza) {
         if (jugador1Comienza) {
             this.jugadorActual = jugador1;
             this.jugadorOponente = jugador2;
-            this.jugadorQueEmpezoPartida = jugador1;
+            this.jugadorInicial = jugador1;
         } else {
             this.jugadorActual = jugador2;
             this.jugadorOponente = jugador1;
-            this.jugadorQueEmpezoPartida = jugador2;
+            this.jugadorInicial = jugador2;
         }
-        this.numeroTurnoGlobal = 1;
-        iniciarTurno(); // Usa el método existente para evitar duplicación
+        this.NumTurno = 1;
+        iniciarTurno(jugadorActual); 
     }
 
     public Jugador getJugadorActual() {
@@ -44,7 +38,7 @@ public class TurnoManager {
     }
 
     public int getNumeroTurnoGlobal() {
-        return numeroTurnoGlobal;
+        return NumTurno;
     }
 
     public boolean seRealizoInvocacionNormal() {
@@ -55,136 +49,84 @@ public class TurnoManager {
         return cartaCampoActivadaEsteTurno;
     }
 
+    public void setJugadorActual(Jugador jugadorActual) {
+        this.jugadorActual = jugadorActual;
+    }
+
+    public void setJugadorOponente(Jugador jugadorOponente) {
+        this.jugadorOponente = jugadorOponente;
+    }
+    /**
+     * Registra que el jugador actual ha realizado una invocación normal este turno.
+     * Solo se permite una invocación normal por turno 
+     */
     public void registrarInvocacionNormal() {
         this.invocacionNormalRealizada = true;
     }
 
+    /**
+     * Registra que el jugador actual ha activado una carta de campo este turno.
+     * Solo se permite activar una carta de campo por turno.
+     */
     public void registrarActivacionCartaCampo() {
         this.cartaCampoActivadaEsteTurno = true;
     }
 
     /**
-     * Muestra un mensaje sobre la fase actual del jugador.
-     * @param accion Opcional: descripción de la acción que llevó al cambio de fase.
-     */
-    private void mostrarCambioFase(String accion) {
-        String mensaje = accion != null 
-            ? jugadorActual.getNombre() + " " + accion + " y ahora está en fase " + faseActual
-            : jugadorActual.getNombre() + " ahora está en fase " + faseActual;
-        System.out.println(mensaje);
-    }
-
-    /**
-     * Avanza a la siguiente fase del turno según el flujo normal.
-     * @return true si la fase cambió, false si no.
+     * Avanza a la siguiente fase del turno según el flujo normal de Yu-Gi-Oh:
+     * DRAW → STANDBY → PRINCIPAL1 → CAMBIO → FINAL → (siguiente jugador)
+     * Cuando se llega a FINAL, se pasa el turno al otro jugador y se reinician banderas.
+     * @return true si la fase cambió, false si no cambió.
      */
     public boolean avanzarFase() {
         FaseTurno faseAnterior = faseActual;
         
         switch (faseActual) {
-            case DRAW:
-                faseActual = FaseTurno.STANDBY;
-                break;
-            case STANDBY:
-                faseActual = FaseTurno.PRINCIPAL1;
-                break;
-            case PRINCIPAL1:
-                if (esPrimerTurnoJugadorInicial()) {
-                    faseActual = FaseTurno.CAMBIO; // Salta batalla en primer turno
-                } else {
-                    faseActual = FaseTurno.BATALLA;
-                }
-                break;
-            case BATALLA:
-                faseActual = FaseTurno.CAMBIO;
-                break;
-            case CAMBIO:
-                faseActual = FaseTurno.FINAL;
-                break;
             case FINAL:
                 finalizarTurnoActual();
                 break;
-        }
-        
-        if (faseAnterior != faseActual) {
-            mostrarCambioFase(null);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Verifica si es el primer turno del jugador que inició la partida.
-     */
-    private boolean esPrimerTurnoJugadorInicial() {
-        return numeroTurnoGlobal == 1 && jugadorActual == jugadorQueEmpezoPartida;
+            case PRINCIPAL1:
+                if (puedeElegirBatalla()) {
+                    faseActual = FaseTurno.BATALLA;
+                } else {
+                    faseActual = FaseTurno.CAMBIO;
+                }
+                break;
+            default:
+                faseActual = faseActual.siguiente();
+                break;
+            }
+            return faseAnterior != faseActual;
     }
 
     /**
      * Finaliza el turno actual, cambiando al otro jugador y reiniciando la fase.
+     * Reinicia las banderas de acciones por turno.
      */
     public void finalizarTurnoActual() {
-        // Cambia de jugador
         Jugador temp = jugadorActual;
         jugadorActual = jugadorOponente;
         jugadorOponente = temp;
         
-        // Incrementa el contador de turnos
-        numeroTurnoGlobal++;
-        System.out.println("Turno finalizado. Ahora es el turno de " + jugadorActual.getNombre());
-        
-        // Reinicia fase y flags
-        iniciarTurno();
+        NumTurno++;
+        iniciarTurno(jugadorActual);
     }
 
     /**
      * Inicia un nuevo turno para el jugador actual.
      * Resetea la fase a DRAW y las banderas de invocación normal y activación de campo.
-     */
-    public void iniciarTurno() {
+     * @param jugador El jugador para el que se inicia el turno.
+     */ 
+    public void iniciarTurno(Jugador jugador) {
         this.faseActual = FaseTurno.DRAW;
         this.invocacionNormalRealizada = false;
         this.cartaCampoActivadaEsteTurno = false;
     }
 
     /**
-     * El jugador elige pasar a la fase de batalla.
-     * Solo se puede hacer desde la fase PRINCIPAL1.
-     */
-    public boolean jugadorEligeIrABatalla() {
-        if (this.faseActual != FaseTurno.PRINCIPAL1) {
-            System.out.println("No se puede ir a Fase de Batalla desde " + this.faseActual);
-            return false;
-        }
-        
-        if (esPrimerTurnoJugadorInicial()) {
-            this.faseActual = FaseTurno.CAMBIO;
-            mostrarCambioFase("no puede entrar a Fase de Batalla en el primer turno del juego");
-        } else {
-            this.faseActual = FaseTurno.BATALLA;
-            mostrarCambioFase("ha entrado en la fase de batalla");
-        }
-        return true;
-    }
-
-    /**
-     * El jugador elige terminar su turno sin realizar una batalla.
-     * Solo se puede hacer desde la fase PRINCIPAL1.
-     */
-    public boolean jugadorEligeTerminarPrincipal1SinBatalla() {
-        if (this.faseActual != FaseTurno.PRINCIPAL1) {
-            System.out.println("No se puede saltar la batalla desde " + this.faseActual);
-            return false;
-        }
-        
-        this.faseActual = FaseTurno.CAMBIO;
-        mostrarCambioFase("ha saltado la fase de batalla");
-        return true;
-    }
-
-    /**
      * Verifica si se puede invocar un monstruo en la fase actual.
-     * @return true si estamos en PRINCIPAL1, false en caso contrario
+     * Solo puede hacerse en fase PRINCIPAL1 y una sola vez por turno.
+     * @return true si es fase PRINCIPAL1 y no se ha invocado un monstruo este turno.
      */
     public boolean puedeInvocarMonstruo() {
         return faseActual == FaseTurno.PRINCIPAL1 && !seRealizoInvocacionNormal();
@@ -192,26 +134,63 @@ public class TurnoManager {
 
     /**
      * Verifica si se pueden activar cartas mágicas o de trampa.
-     * @return true si estamos en PRINCIPAL1, false en caso contrario
+     * Solo pueden activarse en fase PRINCIPAL1 (aunque algunas trampas 
+     * podrían activarse en otras fases, pero eso se maneja con la lógica de la carta).
+     * @return true si estamos en PRINCIPAL1, false en caso contrario.
      */
     public boolean puedeActivarCartaMagicaOTrampa() {
         return faseActual == FaseTurno.PRINCIPAL1;
     }
 
     /**
-     * Verifica si se pueden colocar cartas (hechizo/trampa).
-     * @return true si estamos en PRINCIPAL1, false en caso contrario
+     * Verifica si se pueden colocar cartas bocabajo (hechizo/trampa) en el campo.
+     * Solo se permite en fase PRINCIPAL1.
+     * @return true si estamos en PRINCIPAL1, false en caso contrario.
      */
     public boolean puedeColocarCartas() {
         return faseActual == FaseTurno.PRINCIPAL1;
     }
 
     /**
-     * Verifica si se pueden alternar posiciones de las cartas en el campo.
-     * @return true si estamos en la fase CAMBIO, false en caso contrario
+     * Verifica si se pueden alternar posiciones de los monstruos en el campo (ataque/defensa).
+     * Solo se permite en fase CAMBIO.
+     * @return true si estamos en la fase CAMBIO, false en caso contrario.
      */
     public boolean puedeAlternarPosiciones() {
         return faseActual == FaseTurno.CAMBIO;
     }
 
+    /**
+     * Verifica si el jugador actual puede elegir ir a batalla.
+     * En el primer turno, el jugador que comienza no puede ir a batalla.
+     * @return true si el jugador puede ir a batalla, false en caso contrario.
+     */
+    public boolean puedeElegirBatalla() {
+        return !(NumTurno == 1 && jugadorActual == jugadorInicial);
+    }
+
+    /**
+     * Verifica si un monstruo puede atacar en la fase actual.
+     * Solo pueden atacar los monstruos en posición de ataque y en fase de BATALLA.
+     * @param estaEnModoAtaque true si el monstruo está en modo ataque
+     * @param yaAtacoEsteTurno true si el monstruo ya atacó en este turno
+     * @return true si el monstruo puede atacar, false en caso contrario
+     */
+    public boolean puedeAtacarMonstruo(boolean estaEnModoAtaque, boolean yaAtacoEsteTurno) {
+        return estaEnModoAtaque && faseActual == FaseTurno.BATALLA && !yaAtacoEsteTurno;
+    }
+
+    /**
+     * El jugador puede saltar la fase BATALLA e ir a CAMBIO.
+     * Solo puede hacerse en la fase PRINCIPAL1 y si no se invoco monstruo este turno.
+     */
+    public void saltarBatalla() {
+        if (faseActual == FaseTurno.PRINCIPAL1) {
+            faseActual = FaseTurno.CAMBIO;
+        }
+    }
+
+    public void avanzarTurno() {
+        finalizarTurnoActual();
+    }
 }

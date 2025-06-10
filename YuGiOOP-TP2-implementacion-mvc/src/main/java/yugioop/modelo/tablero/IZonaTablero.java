@@ -54,4 +54,11 @@ public interface IZonaTablero<T extends Carta> {
      * @return La carta en la posición especificada, o null si la posición es inválida.
      */
     T obtenerCarta(int posicion);
+
+    /**
+     * Obtiene la posición de una carta específica en la zona.
+     * @param carta La carta cuya posición se desea obtener.
+     * @return La posición de la carta, o -1 si la carta no se encuentra en la zona.
+     */
+    int obtenerPosicionDeCarta(T carta);
 }

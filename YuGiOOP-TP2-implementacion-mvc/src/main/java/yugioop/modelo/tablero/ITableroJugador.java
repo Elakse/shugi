@@ -1,7 +1,10 @@
 package yugioop.modelo.tablero;
 
 import yugioop.modelo.carta.Carta;
+import yugioop.modelo.carta.CartaMagica;
 import yugioop.modelo.carta.CartaMonstruo;
+import yugioop.modelo.carta.CartaTrampa;
+
 import java.util.List;
 
 /**
@@ -35,13 +38,29 @@ public interface ITableroJugador {
      * @return La IZonaTablero<Carta> que representa la zona de magia y trampas.
      */
     IZonaTablero<Carta> getZonaMagiaTrampa();
+
+    CartaMonstruo obtenerCartaMonstruo(int pos);
+
+    CartaMagica obtenerCartaMagica(int pos);
+    
+    CartaTrampa obtenerCartaTrampa(int pos);
+
+    int obtenerPosicionMonstruo(CartaMonstruo monstruo);
+
+    List<CartaMagica> obtenerCartasMagicasActivas();
+
+    void agregarCartaMagicaActiva(CartaMagica cartaMagica);
+
+    void removerCartaMagicaActiva(CartaMagica cartaMagica);
     
     /**
      * Remueve un monstruo de una posición específica.
      * @param pos La posición (0-4) del monstruo a remover.
      * @return La CartaMonstruo removida, o null si no había monstruo o la posición es inválida.
      */
-    CartaMonstruo removerMonstruo(int pos);
+    void removerMonstruo(int pos);
+
+    Carta obtenerCartaMagicaTrampa(int pos);
     
     /**
      * Remueve una carta mágica o trampa de una posición específica.
@@ -61,16 +80,4 @@ public interface ITableroJugador {
      * @return true si hay al menos un espacio libre, false si todos están ocupados.
      */
     boolean hayEspacioEnZonaMagiaTrampa();
-    
-    /**
-     * Obtiene todos los monstruos actualmente en el tablero.
-     * @return Una lista de CartaMonstruo que representa los monstruos en el tablero.
-     */
-    List<CartaMonstruo> obtenerMonstruosEnCampo();
-    
-    /**
-     * Obtiene todas las cartas mágicas y trampas actualmente en el tablero.
-     * @return Una lista de Carta que representa las cartas mágicas y trampas en el tablero.
-     */
-    List<Carta> obtenerMagiasTrampasEnCampo();
 }

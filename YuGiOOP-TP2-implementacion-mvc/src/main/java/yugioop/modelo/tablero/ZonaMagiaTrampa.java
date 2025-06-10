@@ -1,5 +1,7 @@
 package yugioop.modelo.tablero;
 import yugioop.modelo.carta.Carta;
+import yugioop.modelo.carta.CartaMagica;
+import yugioop.modelo.carta.CartaTrampa;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +89,18 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
         return false;
     }
 
+    @Override
+    public int obtenerPosicionDeCarta(Carta carta){
+        for (int i = 0; i < CANTIDAD_SLOTS_MAGIA_TRAMPA; i++) {
+            ICasillaTablero<Carta> slot = this.slots[i];
+            if (!slot.estaLibre() && slot.getOcupante().equals(carta)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
     /**
      * Obtiene la cantidad de slots disponibles en la Zona de Magia y Trampas.
      * @return La cantidad de slots disponibles.
@@ -109,6 +123,22 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
     public Carta obtenerCarta(int posicion) {
         if (posicion >= 0 && posicion < CANTIDAD_SLOTS_MAGIA_TRAMPA) {
             return this.slots[posicion].getOcupante();
+        }
+        return null;
+    }
+
+    public CartaMagica obtenerCartaMagica(int posicion) {
+        Carta carta = obtenerCarta(posicion);
+        if (carta.esActivableADiscrecion()) {
+            return (CartaMagica) carta;
+        }
+        return null;
+    }
+
+    public CartaTrampa obtenerCartaTrampa(int posicion) {
+        Carta carta = obtenerCarta(posicion);
+        if (!carta.esActivableADiscrecion()) {
+            return (CartaTrampa) carta;
         }
         return null;
     }

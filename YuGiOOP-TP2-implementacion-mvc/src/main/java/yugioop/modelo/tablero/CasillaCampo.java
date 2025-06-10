@@ -26,7 +26,7 @@ public class CasillaCampo extends CasillaBase<CartaMagica> {
      * @return true si se colocó exitosamente, false si la casilla ya está ocupada o si la carta no es válida.
      */
     public boolean colocarCarta(CartaMagica cartaMagica) {
-        if (cartaMagica != null && !cartaMagica.esDeTipoCampo()) {
+        if (cartaMagica != null) {
              System.out.println("Error: Solo se pueden colocar Cartas Mágicas de tipo CAMPO en la Zona de Campo.");
              return false;
         }

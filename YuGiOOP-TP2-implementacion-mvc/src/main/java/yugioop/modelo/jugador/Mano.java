@@ -1,0 +1,56 @@
+package yugioop.modelo.jugador;
+
+import yugioop.modelo.carta.Carta;
+
+import java.util.List;
+import java.util.ArrayList;
+
+public class Mano {
+    private List<Carta> cartas;
+    private int maxCartasEnMano;
+    private int cantCartasEnMano;
+
+    // Constructor
+    public Mano(){
+        this.cartas = new ArrayList<>();
+        this.cantCartasEnMano = 0;
+        this.maxCartasEnMano = 6;
+    }
+
+    public int getMaxCartasEnMano() {
+        return this.maxCartasEnMano;
+    }
+
+    public void sumarMano(){
+        this.cantCartasEnMano += 1;
+    }
+
+    public void restarMano(int i){
+        this.cantCartasEnMano -= 1;
+        this.cartas.remove(i);
+    }
+
+    public int getCantCartas(){
+        return this.cantCartasEnMano;
+    }
+
+    public void agregarCarta(Carta c){
+        this.cartas.add(c);
+        this.sumarMano();
+    }
+    
+    public void mostrarMano(){
+        System.out.println();
+        System.out.println("Mano de " + this.cantCartasEnMano + " cartas");
+        for(Carta c: this.cartas){
+            System.out.println("   - " + c.getNombre());
+        }
+        System.out.println();
+    }
+
+    public Carta quitarCarta(int indice){
+        Carta carta = this.cartas.remove(indice);
+        this.cantCartasEnMano --;
+        return carta;
+    }
+}
