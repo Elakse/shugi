@@ -1,0 +1,100 @@
+[
+    {
+      "nombre": "Dragón Blanco de Ojos Azules",
+      "tipo": "MONSTRUO",
+      "ataque": 3000,
+      "defensa": 2500,
+      "nivel": 8,
+      "tipoMonstruo": "DRAGON",
+      "elemento": "LUZ"
+    },
+    {
+      "nombre": "Mago Oscuro",
+      "tipo": "MONSTRUO",
+      "ataque": 2500,
+      "defensa": 2100,
+      "nivel": 7,
+      "tipoMonstruo": "LANZADOR_DE_CONJUROS",
+      "elemento": "OSCURIDAD"
+    },
+    {
+      "nombre": "Kuriboh",
+      "tipo": "MONSTRUO",
+      "ataque": 300,
+      "defensa": 200,
+      "nivel": 1,
+      "tipoMonstruo": "DEMONIO",
+      "elemento": "OSCURIDAD"
+    },
+    {
+      "nombre": "Soldado Gigante de Piedra",
+      "tipo": "MONSTRUO",
+      "ataque": 1300,
+      "defensa": 2000,
+      "nivel": 4,
+      "tipoMonstruo": "ROCA",
+      "elemento": "TIERRA"
+    },
+    {
+      "nombre": "Celtic Guardian",
+      "tipo": "MONSTRUO",
+      "ataque": 1400,
+      "defensa": 1200,
+      "nivel": 4,
+      "tipoMonstruo": "GUERRERO",
+      "elemento": "TIERRA"
+    },
+    {
+      "nombre": "Kurama",
+      "tipo": "MONSTRUO",
+      "ataque": 800,
+      "defensa": 800,
+      "nivel": 3,
+      "tipoMonstruo": "ALADO",
+      "elemento": "VIENTO"
+    },
+    {
+      "nombre": "SegundaOportunidad",
+      "tipo": "MAGICA",
+      "cantidad": 1
+    },
+    {
+      "nombre": "Equipamiento",
+      "tipo": "MAGICA",
+      "turnos": 2,
+      "diferencialAtaque": 500,
+      "diferencialDefensa": 500,
+      "mensajePeticion": "Selecciona un monstruo para equipar"
+    },
+    {
+      "nombre": "RoboDeCartas",
+      "tipo": "MAGICA",
+      "cantidad": 2
+    },
+    {
+      "nombre": "Defensiva",
+      "tipo": "MAGICA",
+      "turnos": 2,
+      "mensajePeticion": "Selecciona un monstruo para inhabilitar"
+    },
+    {
+      "nombre": "RobarCartas",
+      "tipo": "TRAMPA",
+      "cantidad": 3
+    },
+    {
+      "nombre": "Descartar",
+      "tipo": "TRAMPA",
+      "cantidad": 2
+    },
+    {
+      "nombre": "Contraataque",
+      "tipo": "TRAMPA",
+      "danio": 500
+    },
+    {
+      "nombre": "RecuperarVida",
+      "tipo": "TRAMPA",
+      "cantidad": 500
+    }
+  ]

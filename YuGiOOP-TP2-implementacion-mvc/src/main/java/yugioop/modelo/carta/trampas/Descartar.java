@@ -24,6 +24,6 @@ public class Descartar extends CartaTrampa {
     @Override
     public void activar(Tablero tablero) {
         System.out.println("Activando trampa Descartar");
-        tablero.descartarCartasAleatoriasOponente(cantidad);
+        tablero.descartarCartasAleatorias(cantidad);
     }
 }

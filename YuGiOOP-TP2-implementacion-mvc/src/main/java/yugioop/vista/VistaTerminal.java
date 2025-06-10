@@ -78,16 +78,10 @@ public class VistaTerminal {
         String nombreJugador1 = leerEntrada("Ingrese el nombre del Jugador 1: ");
         String nombreJugador2 = leerEntrada("Ingrese el nombre del Jugador 2: ");
         
-        // Creamos los jugadores con mazos de prueba
-        Jugador jugador1 = new Jugador(nombreJugador1);
-        Jugador jugador2 = new Jugador(nombreJugador2);
-        
-        // Creamos mazos de prueba
-        crearMazoPrueba(jugador1);
-        crearMazoPrueba(jugador2);
-        
         // Inicializamos el controlador con los jugadores
-        controlador = new ControladorJuego(jugador1, jugador2);
+        controlador = new ControladorJuego();
+        controlador.iniciarJuego(nombreJugador1, nombreJugador2);
+        controlador.bucleJuego();
         
         // Limpiamos la pantalla para mostrar solo el mensaje de quién comienza
         limpiarPantalla();
@@ -102,9 +96,6 @@ public class VistaTerminal {
         System.out.println();
         VistaUtils.mostrarMensaje(AMARILLO + "Presiona ENTER para continuar..." + RESET);
         VistaUtils.pausar();
-        
-        // Iniciamos el juego
-        controlador.iniciarJuego();
         
         // Bucle principal del juego
         loopJuego();
@@ -173,13 +164,6 @@ public class VistaTerminal {
     }
 
     /**
-     * Muestra una representación visual del campo de un jugador.
-     */
-    private void mostrarCampoJugador(Jugador jugador) {
-        VistaTablero.mostrarZonaCartas();
-    }
-
-    /**
      * Procesa el menú correspondiente a la fase actual.
      */
     private void procesarMenuFase() {
@@ -217,21 +201,32 @@ public class VistaTerminal {
      * Procesa la fase de robo (DRAW).
      */
     private void procesarFaseDraw() {
-        // VistaMenus ya muestra las opciones adecuadas para la fase actual
         
-        String opcion = VistaUtils.leerEntrada("Seleccione una opción: ");
-        
-        switch (opcion) {
-            case "1":
-                VistaUtils.mostrarMensaje(VERDE + controlador.getJugadorActual().getNombre() + " roba una carta." + RESET);
-                controlador.avanzarFase();
-                break;
-            case "4": // Según las opciones definidas en VistaMenus
-                juegoActivo = false;
-                break;
-            default:
-                VistaUtils.mostrarError("Opción no válida.");
-                break;
+        boolean continuar = true;
+        while (continuar) {
+            String opcion = VistaUtils.leerEntrada("Seleccione una opción: ");
+            switch (opcion) {
+                case "1":
+                    // Robar carta
+                    controlador.getJugadorActual().robarCartasMazo(1);
+                    continuar = false;
+                    break;
+                case "2":
+                    // Ver tablero
+                    mostrarEstadoJuego();
+                    break;
+                case "3":
+                    // Ver mano
+                    VistaTablero.mostrarCartasEnMano(controlador.getJugadorActual().getMano().getCartas());
+                    break;
+                case "4":
+                    // Salir
+                    juegoActivo = false;
+                    continuar = false;
+                    break;
+                default:
+                    VistaUtils.mostrarError("Opción no válida.");
+            }
         }
     }
 
@@ -291,7 +286,7 @@ public class VistaTerminal {
                 mostrarEstadoJuego();
                 break;
             case "8": // Ver mano
-                VistaTablero.mostrarCartasEnMano(controlador.getJugadorActual().getMano());
+                VistaTablero.mostrarCartasEnMano(controlador.getJugadorActual().getMano().getCartas());
                 break;
             default:
                 VistaUtils.mostrarError("Opción no válida.");
@@ -382,19 +377,13 @@ public class VistaTerminal {
     private void procesarInvocacionMonstruo() {
         mostrarTitulo("Invocación de Monstruo");
         
-        // Simulación de selección de carta
-        CartaMonstruo monstruo = new CartaMonstruo("Monstruo de prueba", 1000, 800);
+        // TODO: implementar
         
         boolean posicionAtaque = leerEntrada("¿Invocar en posición de ataque? (s/n): ").toLowerCase().startsWith("s");
         boolean bocaArriba = leerEntrada("¿Invocar boca arriba? (s/n): ").toLowerCase().startsWith("s");
         
-        if (controlador.invocarMonstruo(monstruo, posicionAtaque, bocaArriba)) {
-            mostrarMensaje(VERDE + "¡Monstruo invocado con éxito!" + RESET);
-            VistaUtils.pausar();
-        } else {
-            mostrarError("No se pudo invocar el monstruo.");
-            VistaUtils.pausar();
-        }
+        // TODO: implementar invocarMonstruo
+        
     }
 
 
@@ -402,73 +391,32 @@ public class VistaTerminal {
     private void procesarActivacionMagia() {
         mostrarTitulo("Activación de Carta Mágica");
         
-        // Simulación de selección de carta
-        CartaMagica magia = new CartaMagica("Magia de prueba", TipoMagica.NORMAL, (tablero, carta, jugador) -> {
-            System.out.println("Activando efecto de carta mágica normal");
-        });
-        if (controlador.activarCartaMagica(magia)) {
-            mostrarMensaje(VERDE + "¡Carta mágica activada con éxito!" + RESET);
-            VistaUtils.pausar();
-        } else {
-            mostrarError("No se pudo activar la carta mágica.");
-            VistaUtils.pausar();
-        }
+        // TODO: implementar
+        
+        
     }
 
     private void procesarColocacionTrampa() {
         mostrarTitulo("Colocación de Carta Trampa");
         
-        // Simulación de selección de carta
-        CartaTrampa trampa = new CartaTrampa("Trampa de prueba", (tablero, atacante, defensor, jugador) -> {
-            System.out.println("Activando efecto de carta trampa");
-        });
+       
 
-        if (controlador.colocarCartaTrampa(trampa)) {
-            mostrarMensaje(VERDE + "¡Carta trampa colocada con éxito!" + RESET);
-            VistaUtils.pausar();
-        } else {
-            mostrarError("No se pudo colocar la carta trampa.");
-            VistaUtils.pausar();
-        }
+        // TODO: implementar
+
+       
     }
 
     private void procesarDeclaracionAtaque() {
         mostrarTitulo("Declaración de Ataque");
-        
-        // Simulación de selección de cartas
-        CartaMonstruo atacante = new CartaMonstruo("Atacante", 1500, 1000);
-        CartaMonstruo defensor = new CartaMonstruo("Defensor", 1000, 1500);
-        
-        if (controlador.declararAtaque(atacante, defensor)) {
-            mostrarMensaje(VERDE + "¡Ataque declarado con éxito!" + RESET);
-            VistaUtils.pausar();
-        } else {
-            mostrarError("No se pudo declarar el ataque.");
-            VistaUtils.pausar();
-        }
+        // TODO: implementar
     }
 
     private void procesarCambioPosicion() {
         mostrarTitulo("Cambio de Posición");
-        
-        // Simulación de selección de carta
-        CartaMonstruo monstruo = new CartaMonstruo("Monstruo", 1000, 1000);
-        
-        if (controlador.alternarPosicionMonstruo(monstruo)) {
-            mostrarMensaje(VERDE + "¡Posición alternada con éxito!" + RESET);
-            VistaUtils.pausar();
-        } else {
-            mostrarError("No se pudo alternar la posición.");
-            VistaUtils.pausar();
-        }
+        // TODO: Implementar
     }
 
-    // Métodos auxiliares para UI
 
-    private void crearMazoPrueba(Jugador jugador) {
-        // Aquí crearías un mazo con cartas de prueba
-        mostrarMensaje(AMARILLO + "Creando mazo de prueba para " + jugador.getNombre() + RESET);
-    }
 
     private void mostrarTitulo(String titulo) {
         System.out.println("\n" + FONDO_MAGENTA + BLANCO + " " + titulo + " " + RESET);

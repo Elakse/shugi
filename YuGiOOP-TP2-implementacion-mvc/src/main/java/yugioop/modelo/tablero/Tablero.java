@@ -26,12 +26,11 @@ public class Tablero {
     private Jugador propietarioJugador2;
     private TurnoManager turnoManager;
 
-    public Tablero(Jugador jugador1, Jugador jugador2, TurnoManager turnoManager) {
+    public Tablero(Jugador jugador1, Jugador jugador2) {
         this.propietarioJugador1 = jugador1;
         this.tableroJugador1 = new TableroJugador();
         this.propietarioJugador2 = jugador2;
         this.tableroJugador2 = new TableroJugador();
-        this.turnoManager = turnoManager;
     }
 
     /**
@@ -146,6 +145,10 @@ public class Tablero {
         monstruo.activar(this);
     }
 
+    public Jugador obtenerJugadorOponente() {
+        return turnoManager.getJugadorOponente();
+    }
+
     public void herirJugador(Jugador jugador, int puntos) {
         jugador.perderVida(puntos);
         System.out.println(jugador.getNombre() + " ha recibido " + puntos + " puntos de daño.");
@@ -200,23 +203,28 @@ public class Tablero {
     // TRAMPA
 
     public void robarCartaTrampa(CartaTrampa trampa, int cantidad) {
-        Jugador duenioCarta = this.obtenerJugadorOponente();
+        Jugador duenioCarta = turnoManager.getJugadorOponente();
         duenioCarta.robarCartasMazo(cantidad);
         duenioCarta.enviarAlCementerio(trampa);
+
     }
 
-    public Jugador obtenerJugadorOponente() {
+    public Jugador getJugadorOponente() {
         return turnoManager.getJugadorOponente();
     }
 
-    public void descartarCartasAleatoriasOponente(int cantidad) {
-        Jugador oponente = obtenerJugadorOponente();
+    public void descartarCartasAleatorias(int cantidad) {
+
+        Jugador oponente = turnoManager.getJugadorActual();
         oponente.descartarCartasAleatorias(cantidad);
+
     }
 
     public void recuperarVida(int cantidad) {
+
         Jugador duenioCarta = turnoManager.getJugadorOponente();
         duenioCarta.ganarVida(cantidad);
+
     }
 
     public void daniarAlAtacante(int cantidad) {

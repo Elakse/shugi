@@ -182,4 +182,10 @@ public class CartaMonstruo extends Carta {
     public void setNivel(int nivel) {
         this.nivel = nivel;
     }
+
+    public TipoZona getTipoZona() { return TipoZona.MONSTRUO; }
+
+    public String getTipo(){
+        return "Monstruo";
+    }
 }

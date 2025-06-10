@@ -33,4 +33,10 @@ public abstract class CartaTrampa extends Carta {
     public void setBocaAbajo(boolean bocaAbajo) {
         this.bocaAbajo = bocaAbajo;
     }
+
+    public TipoZona getTipoZona() { return TipoZona.TRAMPA; }
+
+    public String getTipo(){
+        return "Trampa";
+    }
 }

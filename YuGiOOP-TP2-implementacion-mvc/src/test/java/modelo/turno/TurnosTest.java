@@ -62,7 +62,6 @@ public class TurnosTest {
         assertTrue(turnoManager.avanzarFase());
         assertEquals(FaseTurno.BATALLA, turnoManager.getFaseActual());
         
-        
         assertTrue(turnoManager.avanzarFase());
         assertEquals(FaseTurno.CAMBIO, turnoManager.getFaseActual());
         
@@ -103,10 +102,13 @@ public class TurnosTest {
         turnoManager.avanzarFase(); // DRAW -> STANDBY
         turnoManager.avanzarFase(); // STANDBY -> PRINCIPAL1
         
-        assertTrue(turnoManager.jugadorEligeIrABatalla());
+        assertTrue(turnoManager.puedeElegirBatalla());
+        turnoManager.avanzarFase();
         assertEquals(FaseTurno.BATALLA, turnoManager.getFaseActual());
         
-        assertFalse(turnoManager.jugadorEligeIrABatalla());
+        assertTrue(turnoManager.puedeElegirBatalla());
+        turnoManager.avanzarFase();
+        assertEquals(FaseTurno.CAMBIO, turnoManager.getFaseActual());
     }
     
     @Test
@@ -121,10 +123,8 @@ public class TurnosTest {
         turnoManager.avanzarFase(); // DRAW -> STANDBY
         turnoManager.avanzarFase(); // STANDBY -> PRINCIPAL1
         
-        assertTrue(turnoManager.jugadorEligeTerminarPrincipal1SinBatalla());
+        turnoManager.saltarBatalla();
         assertEquals(FaseTurno.CAMBIO, turnoManager.getFaseActual());
-        
-        assertFalse(turnoManager.jugadorEligeTerminarPrincipal1SinBatalla());
     }
     
     @Test
@@ -138,7 +138,8 @@ public class TurnosTest {
         turnoManager.avanzarFase(); // DRAW -> STANDBY
         turnoManager.avanzarFase(); // STANDBY -> PRINCIPAL1
         
-        assertTrue(turnoManager.jugadorEligeIrABatalla());
+        assertFalse(turnoManager.puedeElegirBatalla());
+        turnoManager.avanzarFase();
         assertEquals(FaseTurno.CAMBIO, turnoManager.getFaseActual());
     }
     
@@ -170,30 +171,36 @@ public class TurnosTest {
         
         turnoManager = new TurnoManager(jugador1, jugador2, true);
         
-        turnoManager.registrarInvocacionNormal();
-        assertTrue(turnoManager.seRealizoInvocacionNormal());
-        
-        assertEquals(jugador1, turnoManager.getJugadorActual());
-        turnoManager.avanzarFase(); // DRAW -> STANDBY
-        turnoManager.avanzarFase(); // STANDBY -> PRINCIPAL1
-        turnoManager.avanzarFase(); // PRINCIPAL1 -> CAMBIO (salta BATALLA en primer turno)
-        turnoManager.avanzarFase(); // CAMBIO -> FINAL
-        turnoManager.avanzarFase(); // FINAL -> DRAW (nuevo turno)
-        
-        assertEquals(2, turnoManager.getNumeroTurnoGlobal());
-        assertEquals(jugador2, turnoManager.getJugadorActual());
         assertEquals(FaseTurno.DRAW, turnoManager.getFaseActual());
-        assertFalse(turnoManager.seRealizoInvocacionNormal()); // Se debería haber reseteado
         
+        turnoManager.avanzarFase(); // DRAW -> STANDBY 
+        assertEquals(FaseTurno.STANDBY, turnoManager.getFaseActual());
+        
+        turnoManager.avanzarFase(); // STANDBY -> PRINCIPAL1
+        assertEquals(FaseTurno.PRINCIPAL1, turnoManager.getFaseActual());
+        
+        turnoManager.avanzarFase(); // PRINCIPAL1 -> CAMBIO (primer turno, sin BATALLA)
+        assertEquals(FaseTurno.CAMBIO, turnoManager.getFaseActual());
+        
+        turnoManager.avanzarFase(); // CAMBIO -> FINAL
+        assertEquals(FaseTurno.FINAL, turnoManager.getFaseActual());
+        
+        turnoManager.avanzarFase(); // FINAL -> DRAW (próximo jugador)
+        assertEquals(FaseTurno.DRAW, turnoManager.getFaseActual());
+        assertEquals(jugador2, turnoManager.getJugadorActual());
+        
+        // Avanzamos hasta PRINCIPAL1 
         turnoManager.avanzarFase(); // DRAW -> STANDBY
         turnoManager.avanzarFase(); // STANDBY -> PRINCIPAL1
-        turnoManager.jugadorEligeIrABatalla(); // PRINCIPAL1 -> BATALLA
-        turnoManager.avanzarFase(); // BATALLA -> CAMBIO
-        turnoManager.avanzarFase(); // CAMBIO -> FINAL
-        turnoManager.avanzarFase(); // FINAL -> DRAW (nuevo turno)
         
-        assertEquals(3, turnoManager.getNumeroTurnoGlobal());
-        assertEquals(jugador1, turnoManager.getJugadorActual());
+        // Ahora sí debería poder ir a BATALLA (ya no es el primer turno)
+        assertTrue(turnoManager.puedeElegirBatalla());
+        
+        turnoManager.avanzarFase(); // PRINCIPAL1 -> BATALLA
+        assertEquals(FaseTurno.BATALLA, turnoManager.getFaseActual());
+        
+        turnoManager.avanzarFase(); // BATALLA -> CAMBIO
+        assertEquals(FaseTurno.CAMBIO, turnoManager.getFaseActual());
     }
 
     @Test

@@ -1,211 +1,176 @@
 package yugioop.controlador;
 
+import java.util.List;
+
+import yugioop.modelo.carta.Carta;
+import yugioop.modelo.carta.CartaMonstruo;
+import yugioop.modelo.juego.Juego;
 import yugioop.modelo.jugador.Jugador;
 import yugioop.modelo.tablero.Tablero;
+import yugioop.utils.CargaDeCartas;
+import yugioop.utils.CartaJson;
+import yugioop.vista.VistaTablero;
+import yugioop.vista.VistaUtils;
+import yugioop.modelo.jugador.Mazo;
 import yugioop.modelo.turno.FaseTurno;
-import yugioop.modelo.turno.TurnoManager;
-import yugioop.modelo.carta.CartaMonstruo;
-import yugioop.modelo.carta.CartaMagica;
-import yugioop.modelo.carta.CartaTrampa;
+
+
+
 
 /**
  * Controlador principal del juego Yu-Gi-Oh.
  * Coordina la interacción entre el tablero y el sistema de turnos.
  */
 public class ControladorJuego {
+    private Juego juego;
+    private Jugador jugador1;
+    private Jugador jugador2;
     private Tablero tablero;
-    private TurnoManager turnoManager;
-    
-    /**
-     * Constructor del controlador.
-     * @param jugador1 Primer jugador.
-     * @param jugador2 Segundo jugador.
-     */
-    public ControladorJuego(Jugador jugador1, Jugador jugador2) {
-        this.tablero = new Tablero(jugador1, jugador2);
-        boolean jugador1Comienza = decidirJugadorInicial();
-        this.turnoManager = new TurnoManager(jugador1, jugador2, jugador1Comienza);
+    private FaseTurno faseActual;
+
+    public void iniciarJuego(String nombreJ1, String nombreJ2) {
+        cargarJugadores(nombreJ1, nombreJ2);
+        cargarYAsignarMazos();
+        this.juego = new Juego(jugador1, jugador2);
+        this.tablero = this.juego.getTablero();
+        this.faseActual = this.juego.getFaseActual();
+        decidirJugadorInicial();
+        repartirCartasIniciales();
+        mostrarEstadoInicial();
     }
-    
-    /**
-     * Decide aleatoriamente qué jugador comienza el juego.
-     * @return true si el jugador 1 comienza, false si el jugador 2 comienza.
-     */
-    private boolean decidirJugadorInicial() {
-        return new java.util.Random().nextBoolean();
+
+    private void cargarJugadores(String nombreJ1, String nombreJ2) {
+        jugador1 = new Jugador(nombreJ1);
+        jugador2 = new Jugador(nombreJ2);
     }
-    
-    /**
-     * Obtiene el nombre del jugador que comienza la partida.
-     * @return Nombre del jugador que comienza.
-     */
-    public String getJugadorInicial() {
-        return turnoManager.getJugadorActual().getNombre();
-    }
-    
-    /**
-     * Inicia el juego.
-     */
-    public void iniciarJuego() {
-        System.out.println("¡Juego iniciado!");
-        System.out.println("Es el turno de " + turnoManager.getJugadorActual().getNombre());
-    }
-    
-    /**
-     * Avanza a la siguiente fase del turno.
-     * @return true si se avanzó correctamente, false si no.
-     */
-    public boolean avanzarFase() {
-        return turnoManager.avanzarFase();
-    }
-    
-    /**
-     * El jugador actual decide ir a la fase de batalla.
-     * @return true si se pudo ir a batalla, false si no.
-     */
-    public boolean irAFaseBatalla() {
-        return turnoManager.jugadorEligeIrABatalla();
-    }
-    
-    /**
-     * El jugador actual decide saltar la fase de batalla.
-     * @return true si se pudo saltar la batalla, false si no.
-     */
-    public boolean saltarFaseBatalla() {
-        return turnoManager.jugadorEligeTerminarPrincipal1SinBatalla();
-    }
-    
-    /**
-     * Invoca un monstruo desde la mano al campo.
-     * @param cartaMonstruo La carta de monstruo a invocar.
-     * @param posicionAtaque true para posición de ataque, false para defensa.
-     * @param bocaArriba true para boca arriba, false para boca abajo.
-     * @return true si se pudo invocar, false si no.
-     */
-    public boolean invocarMonstruo(CartaMonstruo cartaMonstruo, boolean posicionAtaque, boolean bocaArriba) {
-        if (!turnoManager.puedeInvocarMonstruo()) {
-            System.out.println("No puedes invocar monstruos en esta fase del turno.");
-            return false;
+
+    private void cargarYAsignarMazos() {
+        String rutaMazoJ1 = "src/main/java/yugioop/resources/mazo1.json";
+        String rutaMazoJ2 = "src/main/java/yugioop/resources/maso2.json";
+
+        List<CartaJson> cartasJson1 = CargaDeCartas.cargarCartas(rutaMazoJ1);
+        List<CartaJson> cartasJson2 = CargaDeCartas.cargarCartas(rutaMazoJ2);
+
+        List<Carta> mazo1 = CargaDeCartas.convertirACartas(cartasJson1);
+        List<Carta> mazo2 = CargaDeCartas.convertirACartas(cartasJson2);
+
+        for (Carta c : mazo1) {
+            jugador1.setMazo(c);
         }
-        
-        // TODO:
-        // tablero.invocarMonstruo(turnoManager.getJugadorActual(), cartaMonstruo, posicionAtaque, bocaArriba);
-        
-        turnoManager.registrarInvocacionNormal();
-        System.out.println(turnoManager.getJugadorActual().getNombre() + " invocó un monstruo.");
-        return true;
-    }
-    
-    /**
-     * Activa una carta mágica desde la mano.
-     * @param cartaMagica La carta mágica a activar.
-     * @return true si se pudo activar, false si no.
-     */
-    public boolean activarCartaMagica(CartaMagica cartaMagica) {
-        if (!turnoManager.puedeActivarCartaMagicaOTrampa()) {
-            System.out.println("No puedes activar cartas mágicas en esta fase del turno.");
-            return false;
+        for (Carta c : mazo2) {
+            jugador2.setMazo(c);
         }
-        
-        // TODO:
-        // tablero.activarCartaMagica(turnoManager.getJugadorActual(), cartaMagica);
-        
-        if (esCartaCampo(cartaMagica)) {
-            turnoManager.registrarActivacionCartaCampo();
+    }
+
+    private void decidirJugadorInicial() {
+        juego.elegirJugadorInicial();
+        VistaUtils.mostrarMensaje("El jugador que inicia es: " + juego.getJugadorActual().getNombre());
+    }
+
+    private void repartirCartasIniciales() {
+        jugador1.robarCartasMazo(6);
+        jugador2.robarCartasMazo(6);
+    }
+
+    private void mostrarEstadoInicial() {
+        VistaTablero.mostrarEstadoJuego(jugador1, jugador2);
+    }
+
+    // TODO: IMPORTANTE - FLUJO DEL JUEGO
+    private void bucleJuego() {
+        boolean juegoActivo = true;
+        while (juegoActivo && !juego.juegoFinalizado()) {
+            Jugador actual = juego.getJugadorActual();
+            VistaUtils.mostrarMensaje("Turno de: " + actual.getNombre());
+            VistaTablero.mostrarCartasEnMano(actual.getMano().getCartas());
+    
+            VistaUtils.mostrarMensaje("1. Colocar carta en tablero");
+            VistaUtils.mostrarMensaje("2. Robar carta del mazo");
+            VistaUtils.mostrarMensaje("3. Pasar turno");
+            VistaUtils.mostrarMensaje("4. Ver tablero");
+            VistaUtils.mostrarMensaje("5. Salir");
+    
+            String opcion = VistaUtils.leerEntrada("Seleccione una opción: ");
+            switch (opcion) {
+                case "1":
+                    // Aquí deberías pedir el índice y el slot
+                    int indiceMano = Integer.parseInt(VistaUtils.leerEntrada("Ingrese el índice de la carta en mano: "));
+                    int slot = Integer.parseInt(VistaUtils.leerEntrada("Ingrese el slot: "));
+                    colocarCartaEnTablero(indiceMano, slot);
+                    break;
+                case "2":
+                    actual.robarCartasMazo(1);
+                    break;
+                case "3":
+                    juego.pasarTurno();
+                    break;
+                case "4":
+                    VistaTablero.mostrarEstadoJuego(actual, juego.getJugadorOponente());
+                    break;
+                case "5":
+                    juegoActivo = false;
+                    break;
+                default:
+                    VistaUtils.mostrarError("Opción no válida.");
+            }
         }
-        
-        System.out.println(turnoManager.getJugadorActual().getNombre() + " activó una carta mágica.");
-        return true;
+        VistaUtils.mostrarMensaje("Juego finalizado. ¡Gracias por jugar!");
     }
+
+    public boolean colocarCartaEnTablero(int indiceMano, int slot) {
+        Jugador jugadorActual = juego.getJugadorActual();
+        Carta carta = jugadorActual.getMano().obtenerCarta(indiceMano);
     
-    /**
-     * Coloca una carta de trampa boca abajo.
-     * @param cartaTrampa La carta de trampa a colocar.
-     * @return true si se pudo colocar, false si no.
-     */
-    public boolean colocarCartaTrampa(CartaTrampa cartaTrampa) {
-        if (!turnoManager.puedeColocarCartas()) {
-            System.out.println("No puedes colocar cartas de trampa en esta fase del turno.");
-            return false;
+        boolean exito = juego.colocarCartaEnTablero(jugadorActual, carta, slot);
+        if (!exito) {
+            VistaUtils.mostrarError("No se pudo colocar la carta en el slot seleccionado.");
         }
-        
-        // TODO:
-        // tablero.colocarCartaTrampa(turnoManager.getJugadorActual(), cartaTrampa);
-        
-        System.out.println(turnoManager.getJugadorActual().getNombre() + " colocó una carta boca abajo.");
-        return true;
+        return exito;
     }
-    
-    /**
-     * Alterna la posición de un monstruo en el campo (de ataque a defensa o viceversa).
-     * @param cartaMonstruo La carta de monstruo cuya posición se va a alternar.
-     * @return true si se pudo alternar la posición, false si no.
-     */
-    public boolean alternarPosicionMonstruo(CartaMonstruo cartaMonstruo) {
-        if (!turnoManager.puedeAlternarPosiciones()) {
-            System.out.println("No puedes alternar posiciones en esta fase del turno.");
-            return false;
-        }
-        
-        // TODO:
-        // tablero.alternarPosicionMonstruo(turnoManager.getJugadorActual(), cartaMonstruo);
-        
-        System.out.println(turnoManager.getJugadorActual().getNombre() + " alternó la posición de un monstruo.");
-        return true;
+
+    public void robarCartaJugadorActual() {
+        Jugador jugadorActual = juego.getJugadorActual();
+        jugadorActual.robarCartasMazo(1);
     }
-    
-    /**
-     * Declara un ataque de un monstruo a otro.
-     * @param monstruoAtacante El monstruo que ataca.
-     * @param monstruoDefensor El monstruo que defiende.
-     * @return true si se pudo atacar, false si no.
-     */
-    public boolean declararAtaque(CartaMonstruo monstruoAtacante, CartaMonstruo monstruoDefensor) {
-        if (turnoManager.getFaseActual() != FaseTurno.BATALLA) {
-            System.out.println("No puedes atacar fuera de la fase de batalla.");
-            return false;
-        }
-        
-        // TODO:
-        // tablero.resolverAtaque(monstruoAtacante, monstruoDefensor);
-        
-        System.out.println(turnoManager.getJugadorActual().getNombre() + " declaró un ataque.");
-        return true;
+
+    public void pasarTurno() {
+        juego.pasarTurno();
     }
-    
-    // Método auxiliar para comprobar si una carta mágica es una carta de campo
-    private boolean esCartaCampo(CartaMagica cartaMagica) {
-        return false; 
+
+    public void mostrarEstadoTablero() {
+        VistaTablero.mostrarEstadoJuego(jugador1, jugador2);
     }
-    
-    /**
-     * Finaliza el turno actual.
-     */
-    public void finalizarTurno() {
-        turnoManager.finalizarTurnoActual();
-    }
-    
-    /**
-     * Obtiene la fase actual del turno.
-     * @return La fase actual.
-     */
-    public FaseTurno getFaseActual() {
-        return turnoManager.getFaseActual();
-    }
-    
-    /**
-     * Obtiene el jugador actual.
-     * @return El jugador actual.
-     */
+
     public Jugador getJugadorActual() {
-        return turnoManager.getJugadorActual();
+        return this.juego.getJugadorActual();
     }
-    
-    /**
-     * Obtiene el jugador oponente.
-     * @return El jugador oponente.
-     */
+
     public Jugador getJugadorOponente() {
-        return turnoManager.getJugadorOponente();
+        Jugador actual = this.juego.getJugadorActual();
+        if (actual.equals(jugador1)) {
+            return jugador2;
+        } else {
+            return jugador1;
+        }
     }
+
+    // JUGADOR INCIIAL
+    public Jugador getJugadorInicial() {
+        return this.juego.elegirJugadorInicial();
+    }
+
+
+    public FaseTurno getFaseActual() {
+        return this.juego.getFaseActual();
+    }
+
+    public void avanzarFase() {
+        this.juego.avanzarFase();
+    }
+
+    public boolean irAFaseBatalla() {
+        return this.juego.irAFaseBatalla();
+    }
+
+    
 }

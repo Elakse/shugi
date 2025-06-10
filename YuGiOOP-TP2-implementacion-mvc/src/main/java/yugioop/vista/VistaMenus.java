@@ -1,9 +1,6 @@
 package yugioop.vista;
 
 import yugioop.modelo.turno.FaseTurno;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * Clase encargada de gestionar los menús de las diferentes fases del juego.

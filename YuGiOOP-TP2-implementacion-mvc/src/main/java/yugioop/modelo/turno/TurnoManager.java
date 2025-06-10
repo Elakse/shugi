@@ -193,4 +193,8 @@ public class TurnoManager {
     public void avanzarTurno() {
         finalizarTurnoActual();
     }
+
+    public void setFaseActual(FaseTurno faseActual) {
+        this.faseActual = faseActual;
+    }
 }

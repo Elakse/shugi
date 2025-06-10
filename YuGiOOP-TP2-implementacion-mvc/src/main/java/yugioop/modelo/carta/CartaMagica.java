@@ -27,4 +27,9 @@ public abstract class CartaMagica extends Carta {
         return true; // Las cartas mágicas son activables a discreción del jugador
     } 
 
+    public TipoZona getTipoZona() { return TipoZona.MAGICA; } // para monstruos
+
+    public String getTipo(){
+        return "Mágica";
+    }
 }

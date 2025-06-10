@@ -1,5 +1,7 @@
 package yugioop.modelo.jugador;
 
+import java.util.List;
+
 import yugioop.modelo.carta.Carta;
 import yugioop.modelo.tablero.TableroJugador;
 
@@ -77,12 +79,8 @@ public class Jugador {
         System.out.println(nombre + " envía " + carta.getNombre() + " al cementerio.");
     }
 
-    public void asignarMazo(Mazo mazo){
-        this.mazo = mazo;
-    }
-
-    public void rendirse() {
-        this.estaEnVida = false;
+    public void setMazo(Carta c){
+        this.mazo.sumarCartas(c);
     }
 
     public Mano getMano(){
@@ -150,5 +148,10 @@ public class Jugador {
             System.out.println("No tiene cartas en tu mano para quitar ... ");
         }
     }
+
+    public List<Carta> getCartas(){
+        return this.mano.getCartas();
+    }   
+    
 }
 

@@ -53,4 +53,12 @@ public class Mano {
         this.cantCartasEnMano --;
         return carta;
     }
+
+    public Carta obtenerCarta(int indice){
+        return this.cartas.get(indice);
+    }
+
+    public List<Carta> getCartas(){
+        return this.cartas;
+    }
 }

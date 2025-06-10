@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import yugioop.modelo.carta.Carta;
 import yugioop.modelo.carta.CartaMonstruo;
 import yugioop.modelo.carta.trampas.*;
 import yugioop.modelo.carta.magicas.*;
@@ -22,15 +23,15 @@ public class CargaDeCartas {
 
 
     // Convierte una lista de objetos CartaJson a una lista de cartas 
-    public static List<Object> convertirACartas(List<CartaJson> cartasJson) {
-        List<Object> cartas = new ArrayList<>();
+    public static List<Carta> convertirACartas(List<CartaJson> cartasJson) {
+        List<Carta> cartas = new ArrayList<>();
         for (CartaJson cj : cartasJson) {
             if ("MONSTRUO".equalsIgnoreCase(cj.tipo)) {
                 CartaMonstruo monstruo = new CartaMonstruo(
                     cj.nombre,
                     cj.ataque != null ? cj.ataque : 0,
-                    cj.defensa != null ? cj.defensa : 0
-            
+                    cj.defensa != null ? cj.defensa : 0,
+                    cj.nivel != null ? cj.nivel : 1
                     // agrega más campos si tu constructor lo requiere
                 );
                 cartas.add(monstruo);

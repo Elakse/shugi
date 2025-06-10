@@ -18,8 +18,8 @@ public class VistaTablero {
         mostrarZonaCartas();
         
         // Mostrar información de las cartas en mano
-        VistaUtils.mostrarMensaje(AsciiArt.AMARILLO + "Cartas en mano: " + jugador.getCartasEnMano()+ AsciiArt.RESET);
-        mostrarCartasEnMano(jugador.getMano());
+        VistaUtils.mostrarMensaje(AsciiArt.AMARILLO + "Cartas en mano: " + jugador.getCantCartasEnMano()+ AsciiArt.RESET);
+        // mostrarCartasEnMano(jugador.getCartas());
     }
     
     /**
@@ -31,7 +31,7 @@ public class VistaTablero {
         mostrarZonaCartas();
         
         // Para el oponente normalmente no mostramos detalles de sus cartas en mano
-        VistaUtils.mostrarMensaje(AsciiArt.AMARILLO + "Cartas en mano del oponente: " + oponente.getMano().size() + AsciiArt.RESET);
+        VistaUtils.mostrarMensaje(AsciiArt.AMARILLO + "Cartas en mano del oponente: " + oponente.getCantCartasEnMano() + AsciiArt.RESET);
     }
     
     /**
@@ -56,9 +56,7 @@ public class VistaTablero {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < cartas.size(); i++) {
             Carta carta = cartas.get(i);
-            sb.append(i + 1).append(". ").append(carta.getNombre());
-            
-            // Separamos las cartas con comas excepto la última
+            sb.append(i + 1).append(". ").append(carta.getTipo()).append(": ").append(carta.getNombre());
             if (i < cartas.size() - 1) {
                 sb.append(", ");
             }

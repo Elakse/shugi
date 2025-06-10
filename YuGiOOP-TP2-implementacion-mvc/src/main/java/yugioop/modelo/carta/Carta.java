@@ -35,4 +35,8 @@ public abstract class Carta {
         this.bocaAbajo = true;
     }
 
+    public abstract TipoZona getTipoZona();
+
+    public abstract String getTipo();
+
 }
