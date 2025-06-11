@@ -1,28 +1,20 @@
 package yugioop.modelo.carta.trampas;
 
 import yugioop.modelo.carta.CartaTrampa;
-import yugioop.modelo.tablero.Tablero;
+import yugioop.modelo.mesa.MesaYugioh;
 
 public class Contraataque extends CartaTrampa {
-     private final int danio;
+    private Integer danio;
 
-    public Contraataque(String nombre, int danio) {
-        super(nombre);
+    public Contraataque(String nombre, Integer danio) {
+        super(nombre, Evento.COLOCA_CARTA);
         this.danio = danio;
     }
 
     @Override
-    public void revelar() {
-        this.setBocaAbajo(false);
-    }
-    
-    @Override
-    public boolean debeActivarse(Evento evento, Tablero tablero) {
-        return evento == Evento.COLOCAR_CARTA;
-    }
-
-    @Override
-    public void activar(Tablero tablero) {
-        tablero.daniarAlAtacante(danio);
+    public void activar(MesaYugioh mesa, Evento evento) {
+        if(this.evento == evento){
+            mesa.jugadorActualPierdeVida(danio);
+        }
     }
 }

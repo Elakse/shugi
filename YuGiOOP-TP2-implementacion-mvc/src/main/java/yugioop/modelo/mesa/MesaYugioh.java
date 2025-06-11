@@ -3,6 +3,7 @@ package yugioop.modelo.mesa;
 import yugioop.modelo.jugador.*;
 import yugioop.modelo.tablero.*;
 import yugioop.modelo.carta.*;
+import yugioop.modelo.carta.trampas.*;
 import yugioop.modelo.turno.*;
 
 public class MesaYugioh {
@@ -148,9 +149,10 @@ public class MesaYugioh {
         return obtenerContextoJugadorActual().cartaMagicaRequiereObjetivo(posicion);
     }
 
-    /*public void activarCartasTrampaActivas(){
-
-    }*/
+    public void activarCartasTrampa(Evento evento){
+        contextoJugador1.activarCartasTrampa(this, evento);
+        contextoJugador2.activarCartasTrampa(this, evento);
+    }
 
     public void jugadorActualPierdeVida(Integer danio){
         obtenerJugadorActual().perderVida(danio);
@@ -170,6 +172,14 @@ public class MesaYugioh {
 
     public void jugadorOponentePierdeVida(Integer danio){
         obtenerJugadorOponente().perderVida(danio);
+    }
+
+    public void jugadorActualGanaVida(Integer vida){
+        obtenerJugadorActual().ganarVida(vida);
+    }
+
+    public void jugadorOponenteGanaVida(Integer vida){
+        obtenerJugadorOponente().ganarVida(vida);
     }
 
     public void jugadorOponenteRobaCartasMazo(Integer cantidad){

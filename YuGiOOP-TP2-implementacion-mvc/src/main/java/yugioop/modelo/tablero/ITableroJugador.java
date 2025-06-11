@@ -28,6 +28,8 @@ public interface ITableroJugador {
      */
     IZonaTablero<Carta> getZonaMagiaTrampa();
 
+    List<CartaTrampa> obtenerCartasTrampa();
+
     Integer obtenerPosicionMonstruo(CartaMonstruo monstruo);
 
     List<CartaMagica> obtenerCartasMagicasActivas();

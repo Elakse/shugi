@@ -2,6 +2,8 @@ package yugioop.modelo.jugador;
 
 import yugioop.modelo.tablero.TableroJugador;
 import yugioop.modelo.carta.*;
+import yugioop.modelo.carta.trampas.*;
+import java.util.List;
 import yugioop.modelo.mesa.MesaYugioh;
 
 public class ContextoJugador {
@@ -113,6 +115,13 @@ public class ContextoJugador {
     public void activarCartaTrampa(){
 
     }*/
+
+    public void activarCartasTrampa(MesaYugioh mesa, Evento evento){
+        List<CartaTrampa> trampas = tableroJugador.obtenerCartasTrampa();
+        for (CartaTrampa trampa : trampas) {
+            trampa.activar(mesa, evento);
+        }
+    }
 
     public void activarCartasMagicasActivas(MesaYugioh mesa){
         tableroJugador.obtenerCartasMagicasActivas();

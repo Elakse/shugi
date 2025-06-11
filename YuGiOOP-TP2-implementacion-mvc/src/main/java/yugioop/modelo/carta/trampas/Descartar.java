@@ -1,29 +1,20 @@
 package yugioop.modelo.carta.trampas;
 
 import yugioop.modelo.carta.CartaTrampa;
-import yugioop.modelo.tablero.Tablero;
+import yugioop.modelo.mesa.MesaYugioh;
 
 public class Descartar extends CartaTrampa {
-    private final int cantidad;
+    private final Integer cantidad;
 
-    public Descartar(String nombre, int cantidad) {
-        super(nombre);
+    public Descartar(String nombre, Integer cantidad) {
+        super(nombre, Evento.ATACA);
         this.cantidad = cantidad;
     }
 
     @Override
-    public void revelar() {
-        this.setBocaAbajo(false);
-    }
-    
-    @Override
-    public boolean debeActivarse(Evento evento, Tablero tablero) {
-        return evento == Evento.ATACAR;
-    }
-
-    @Override
-    public void activar(Tablero tablero) {
-        System.out.println("Activando trampa Descartar");
-        tablero.descartarCartasAleatorias(cantidad);
+    public void activar(MesaYugioh mesa, Evento evento) {
+        if(evento == this.evento){
+            mesa.jugadorActualDescartaCartasAleatorias(cantidad);
+        }
     }
 }

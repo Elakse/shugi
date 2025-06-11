@@ -36,6 +36,11 @@ public class TableroJugador implements ITableroJugador {
     }
 
     @Override
+    public List<CartaTrampa> obtenerCartasTrampa(){
+        return zonaMagiaTrampa.obtenerCartasTrampa();
+    }
+
+    @Override
     public void agregarCartaMagicaActiva(CartaMagica cartaMagica){
         cartasMagicasActivas.add(cartaMagica);
     }

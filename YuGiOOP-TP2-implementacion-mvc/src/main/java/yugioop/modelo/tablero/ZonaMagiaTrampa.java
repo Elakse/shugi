@@ -172,4 +172,18 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
         }
         throw new IllegalStateException("La carta en la posición " + posicion + " no es una carta trampa");
     }
+
+    public List<CartaTrampa> obtenerCartasTrampa() {
+        List<CartaTrampa> cartasTrampa = new ArrayList<>();
+        for (int i = 0; i < tamanio; i++) {
+            if (!slots[i].estaLibre()) {
+                try {
+                    cartasTrampa.add(obtenerCartaTrampa(i));
+                } catch (IllegalStateException e) {
+                    // La carta en esta posición no es una carta trampa; se omite.
+                }
+            }
+        }
+        return cartasTrampa;
+    }
 }

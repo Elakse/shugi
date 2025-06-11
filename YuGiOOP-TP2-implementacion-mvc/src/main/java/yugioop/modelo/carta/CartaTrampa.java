@@ -1,11 +1,14 @@
 package yugioop.modelo.carta;
 
-import yugioop.modelo.tablero.Tablero;
 import yugioop.modelo.carta.trampas.Evento;
+import yugioop.modelo.mesa.MesaYugioh;
 
 public abstract class CartaTrampa extends Carta {
-    public CartaTrampa(String nombre) { 
+    protected Evento evento;
+
+    public CartaTrampa(String nombre, Evento evento) { 
         super(nombre, false);
+        this.evento = evento;
     }
 
     @Override
@@ -17,31 +20,11 @@ public abstract class CartaTrampa extends Carta {
     public boolean esMonstruo(){
         return esMonstruo;
     }
-    
-    public abstract void revelar();
-
-    /**
-     * Determina si la carta trampa debe activarse en el evento dado.
-     * @param evento El evento que desencadena la activación.
-     * @param tablero El tablero del juego.
-     * @return true si la carta trampa debe activarse, false en caso contrario.
-     */
-    public abstract boolean debeActivarse(Evento evento, Tablero tablero);
 
     /**
      * Activa la carta trampa en el tablero.
      * @param tablero El tablero del juego.
      */
-    public abstract void activar(Tablero tablero);
+    public abstract void activar(MesaYugioh mesa, Evento evento);
     
-
-    public void setBocaAbajo(boolean bocaAbajo) {
-        this.bocaAbajo = bocaAbajo;
-    }
-
-    public TipoZona getTipoZona() { return TipoZona.TRAMPA; }
-
-    public String getTipo(){
-        return "Trampa";
-    }
 }

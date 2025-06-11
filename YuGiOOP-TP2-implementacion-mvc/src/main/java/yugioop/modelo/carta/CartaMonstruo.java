@@ -37,7 +37,7 @@ public class CartaMonstruo extends Carta {
     public boolean esMonstruo(){
         return esMonstruo;
     }
-    
+
     @Override
     public boolean esActivableADiscrecion(){
         return false;
@@ -95,40 +95,6 @@ public class CartaMonstruo extends Carta {
             oponente.destruirCartaMonstruo(objetivo);
         }
     }
-
-
-    /*public void activar(MesaYugioh mesa, int posObjetivo) {
-        if (!this.estaInhabilitada()) {
-            System.out.println(this.nombre + " ataca a " + monstruo.getNombre());
-            if(monstruo.estaEnModoAtaque()) {
-                int danio = this.computarAtaqueContraModoAtaque(monstruo);
-                if (danio > 0) {
-                    tablero.destruirMonstruo(monstruo);
-                    tablero.herirJugador(tablero.obtenerJugadorOponente(), danio);
-                } else if (danio < 0) {
-                    tablero.destruirMonstruo(this);
-                    tablero.herirJugador(tablero.obtenerJugadorActual(), -danio);
-                } else {
-                    tablero.destruirMonstruo(monstruo);
-                    tablero.destruirMonstruo(this);
-                }
-            }
-            else {
-                int danio = this.computarAtaqueContraModoDefensa(monstruo);
-                if(danio < 0){
-                    tablero.destruirMonstruo(this);
-                    tablero.herirJugador(tablero.obtenerJugadorActual(), -danio);
-                } else if (danio > 0) { //Danio positivo significa que el monstruo en defensa fue destruido
-                    tablero.destruirMonstruo(monstruo);
-                } else {
-                    tablero.destruirMonstruo(monstruo);
-                    tablero.destruirMonstruo(this);
-                }
-            }
-        } else {
-            System.out.println("El monstruo está inhabilitado.");
-        }
-    }*/
 
     public void incrementarAtkActual(Integer dif){
         cambiarAtaqueActual(ataque + dif);
@@ -248,9 +214,4 @@ public class CartaMonstruo extends Carta {
         this.nivel = nivel;
     }
 
-    public TipoZona getTipoZona() { return TipoZona.MONSTRUO; }
-
-    public String getTipo(){
-        return "Monstruo";
-    }
 }
