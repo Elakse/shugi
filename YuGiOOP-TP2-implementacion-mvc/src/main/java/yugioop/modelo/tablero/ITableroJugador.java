@@ -58,7 +58,7 @@ public interface ITableroJugador {
      * @param pos La posición (0-4) del monstruo a remover.
      * @return La CartaMonstruo removida, o null si no había monstruo o la posición es inválida.
      */
-    void removerMonstruo(int pos);
+    CartaMonstruo removerMonstruo(int pos);
 
     Carta obtenerCartaMagicaTrampa(int pos);
     
@@ -68,6 +68,12 @@ public interface ITableroJugador {
      * @return La Carta removida, o null si no había carta o la posición es inválida.
      */
     Carta removerMagiaTrampa(int pos);
+
+    /**
+     * Obtiene la cantidad de monstruos ocupantes en la zona de monstruos.
+     * @return La cantidad de monstruos ocupantes.
+     */
+    int getCantMonstrosOcupantes();
     
     /**
      * Verifica si hay espacio libre en la zona de monstruos.

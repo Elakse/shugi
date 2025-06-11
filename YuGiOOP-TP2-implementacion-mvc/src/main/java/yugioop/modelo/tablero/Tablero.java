@@ -4,6 +4,7 @@ package yugioop.modelo.tablero;
 import yugioop.modelo.carta.CartaMagica;
 import yugioop.modelo.carta.CartaMonstruo;
 import yugioop.modelo.carta.CartaTrampa;
+import yugioop.modelo.carta.Carta;
 import yugioop.modelo.jugador.Jugador;
 import yugioop.modelo.turno.TurnoManager;
 //import yugioop.modelo.carta.trampas.Evento;
@@ -140,9 +141,10 @@ public class Tablero {
         return tableroJugadorActual.obtenerCartaMonstruo(posicion - 1);
     }
 
-    public void activarCartaMonstruo(int posicion) {
-        CartaMonstruo monstruo = obtenerMonstruoPorPosicion(posicion);
-        monstruo.activar(this);
+    public void activarCartaMonstruo(int posicionMonstruo, int posicionAtacado) {
+        CartaMonstruo monstruo = obtenerMonstruoPorPosicion(posicionMonstruo);
+        CartaMonstruo monstruoAtacado = obtenerMonstruoPorPosicion(posicionAtacado);
+        monstruo.activar(this, monstruoAtacado);
     }
 
     public Jugador obtenerJugadorOponente() {
@@ -206,7 +208,6 @@ public class Tablero {
         Jugador duenioCarta = turnoManager.getJugadorOponente();
         duenioCarta.robarCartasMazo(cantidad);
         duenioCarta.enviarAlCementerio(trampa);
-
     }
 
     public Jugador getJugadorOponente() {
@@ -218,6 +219,44 @@ public class Tablero {
         Jugador oponente = turnoManager.getJugadorActual();
         oponente.descartarCartasAleatorias(cantidad);
 
+    }
+
+
+
+    public boolean colocarCartaMonstruo(CartaMonstruo monstruo, int posicion) {
+        Jugador jugadorActual = obtenerJugadorActual();
+        if(jugadorActual.tieneCartaEnMano(monstruo)) {
+            jugadorActual.sacarCartaDeMano(monstruo);
+            int numSacrificios = monstruo.sacrificiosNecesarios();
+            ITableroJugador tableroJugadorActual = obtenerTableroJugadorActual();
+            CartaMonstruo monstruoSacrificio;
+            if (tableroJugadorActual.getCantMonstrosOcupantes() < numSacrificios) {
+                System.out.println("No hay suficientes monstruos en el tablero para sacrificar.");
+                return false;
+            }
+            for (int i = 0; i < numSacrificios; i++) {
+                do {
+                    monstruoSacrificio = tableroJugadorActual.removerMonstruo((int) (Math.random() * 5));
+                } while (monstruoSacrificio == null);
+                
+            }
+            tableroJugadorActual.colocarMonstruo(monstruo, posicion - 1);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean colocarCartaMagicaTrampa(Carta carta, int posicion) {
+        Jugador jugadorActual = obtenerJugadorActual();
+        if(jugadorActual.tieneCartaEnMano(carta)) {
+            jugadorActual.sacarCartaDeMano(carta);
+            ITableroJugador tableroJugadorActual = obtenerTableroJugadorActual();
+            tableroJugadorActual.colocarMagiaTrampa(carta, posicion - 1);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void recuperarVida(int cantidad) {

@@ -5,7 +5,7 @@ import org.jline.reader.impl.completer.*;
 import org.jline.terminal.*;
 
 import yugioop.controlador.ControladorJuego;
-import yugioop.modelo.carta.*;
+//import yugioop.modelo.carta.*;
 import yugioop.modelo.jugador.Jugador;
 import yugioop.modelo.turno.FaseTurno;
 import java.io.IOException;

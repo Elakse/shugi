@@ -6,16 +6,20 @@ import yugioop.modelo.tablero.Tablero;
 
 public class Defensiva extends CartaMagica {
 
-    private String mensajePeticion;
 
-    public Defensiva(String nombre, int turnos, String mensajePeticion) {
+    public Defensiva(String nombre, int turnos) {
         super(nombre, turnos);
-        this.mensajePeticion = mensajePeticion;
+        this.turnos = turnos;
+        this.turnosRestantes = turnos;
     }
 
     @Override
     public boolean activar(Tablero tablero) {
-        CartaMonstruo monstruo = tablero.pedirCartaMonstruoPorPosicion(mensajePeticion);
+        throw new UnsupportedOperationException("Esta carta no se puede activar sin un monstruo.");
+    }
+
+    @Override
+    public boolean activar(Tablero tablero, CartaMonstruo monstruo) {
         tablero.inhabilitarCartaMonstruo(monstruo);
         if(this.turnosRestantes > 0) {
             this.turnosRestantes--;

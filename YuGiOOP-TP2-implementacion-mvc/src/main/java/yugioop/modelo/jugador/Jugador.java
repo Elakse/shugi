@@ -105,6 +105,14 @@ public class Jugador {
         }
     }
 
+    public boolean tieneCartaEnMano(Carta carta) {
+        return this.mano.tieneCarta(carta);
+    }
+
+    public void sacarCartaDeMano(Carta carta) {
+        this.mano.quitarCarta(this.getCartas().indexOf(carta));
+    }
+
     public void descartarCartasAleatorias(int cantidad) {
         if (cantidad > this.getCantCartasEnMano()) {
             return;

@@ -24,6 +24,18 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
         }
     }
 
+    @Override
+    public int getCantCartasOcupantes(){
+        int cantidadOcupantes = 0;
+        for (CasillaMagiaTrampa slot : slots) {
+            if (!slot.estaLibre()) {
+                cantidadOcupantes++;
+            }
+        }
+        return cantidadOcupantes;
+    }
+
+
     /**
      * Obtiene una lista de las cartas mágicas y trampas ocupando los slots de la zona.
      * @return Lista de cartas mágicas y trampas ocupantes.

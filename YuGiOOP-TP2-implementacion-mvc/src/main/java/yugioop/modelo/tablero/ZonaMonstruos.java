@@ -94,6 +94,17 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
         }
         return null;
     }
+
+    @Override
+    public int getCantCartasOcupantes(){
+        int cantidadOcupantes = 0;
+        for (ICasillaTablero<CartaMonstruo> slot : slots) {
+            if (!slot.estaLibre()) {
+                cantidadOcupantes++;
+            }
+        }
+        return cantidadOcupantes;
+    }
     
     /**
      * Verifica si hay algún espacio libre en la zona de monstruos.

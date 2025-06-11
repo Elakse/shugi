@@ -77,6 +77,10 @@ public class Juego {
         return jugadorActual;
     }
 
+    public int getNumeroTurno() {
+        return turnoManager.getNumeroTurnoGlobal();
+    }
+
     // Avanza el turno al otro jugador
     public void pasarTurno() {
         if (jugadorActual == jugador1) {

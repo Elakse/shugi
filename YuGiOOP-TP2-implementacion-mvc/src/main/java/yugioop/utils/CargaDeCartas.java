@@ -57,9 +57,8 @@ public class CargaDeCartas {
                     case "Defensiva":
                         cartas.add(new Defensiva(
                             cj.nombre,
-                            cj.turnos != null ? cj.turnos : 1,
-                            cj.mensajePeticion != null ? cj.mensajePeticion : ""
-                        ));
+                            cj.turnos != null ? cj.turnos : 1
+                            ));
                         break;
                     case "Equipamiento":
                         cartas.add(new Equipamiento(

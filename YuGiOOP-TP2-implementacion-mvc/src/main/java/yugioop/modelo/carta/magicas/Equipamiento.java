@@ -17,10 +17,13 @@ public class Equipamiento extends CartaMagica {
     }
 
     @Override
-    public boolean activar(Tablero tablero) {
-        CartaMonstruo monstruo = null;
+    public boolean activar(Tablero tablero){
+        throw new UnsupportedOperationException("Esta carta no se puede activar sin un monstruo.");
+    }
+
+    @Override
+    public boolean activar(Tablero tablero, CartaMonstruo monstruo) {
         if(turnosRestantes == turnos){
-            monstruo = tablero.pedirCartaMonstruoPorPosicion(this.mensajePeticion);
             tablero.equiparCartaMagica(this, monstruo);
         }
         if(this.turnosRestantes > 0) {
@@ -28,9 +31,7 @@ public class Equipamiento extends CartaMagica {
             return true;
         }
         else {
-            if (monstruo != null) {
-                monstruo.desequiparCartaMagica();
-            }
+            monstruo.desequiparCartaMagica();
             return false;
         }
     }

@@ -77,7 +77,7 @@ public class ControladorJuego {
     }
 
     // TODO: IMPORTANTE - FLUJO DEL JUEGO
-    private void bucleJuego() {
+    public void bucleJuego() {
         boolean juegoActivo = true;
         while (juegoActivo && !juego.juegoFinalizado()) {
             Jugador actual = juego.getJugadorActual();

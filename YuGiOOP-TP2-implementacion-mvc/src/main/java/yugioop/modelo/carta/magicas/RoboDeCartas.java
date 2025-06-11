@@ -1,6 +1,7 @@
 package yugioop.modelo.carta.magicas;
 
 import yugioop.modelo.carta.CartaMagica;
+import yugioop.modelo.carta.CartaMonstruo;
 import yugioop.modelo.tablero.Tablero;
 
 public class RoboDeCartas extends CartaMagica {
@@ -16,5 +17,10 @@ public class RoboDeCartas extends CartaMagica {
     public boolean activar(Tablero tablero) {
         tablero.jugadorRobaCartasMazo(this.cantidad);
         return true;
+    }
+
+    @Override
+    public boolean activar(Tablero tablero, CartaMonstruo monstruo){
+        throw new UnsupportedOperationException("Esta carta no se puede activar con un monstruo.");
     }
 }

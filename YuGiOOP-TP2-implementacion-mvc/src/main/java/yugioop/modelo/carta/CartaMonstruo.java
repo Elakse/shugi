@@ -20,14 +20,23 @@ public class CartaMonstruo extends Carta {
         this.cartaMagicaEquipada = null;
         this.inhabilitada = false; // Por defecto no está inhabilitada
     }
+
+    public int sacrificiosNecesarios() {
+        if (this.nivel <= 4) {
+            return 0;
+        } else if (this.nivel <= 6) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
     
     @Override
     public boolean esActivableADiscrecion(){
         return false;
     }
 
-    public void activar(Tablero tablero){
-        CartaMonstruo monstruo = tablero.pedirCartaMonstruoPorPosicion("Elegir un monstruo a atacar");
+    public void activar(Tablero tablero, CartaMonstruo monstruo) {
         if (!this.estaInhabilitada()) {
             System.out.println(this.nombre + " ataca a " + monstruo.getNombre());
             if(monstruo.estaEnModoAtaque()) {

@@ -103,8 +103,8 @@ public class TableroJugador implements ITableroJugador {
      * @return La CartaMonstruo removida, o null si no había monstruo o la posición es inválida.
      */
     @Override
-    public void removerMonstruo(int pos) {
-        zonaMonstruos.removerCartaDeSlot(pos);
+    public CartaMonstruo removerMonstruo(int pos) {
+        return zonaMonstruos.removerCartaDeSlot(pos);
     }
 
     /**
@@ -115,6 +115,11 @@ public class TableroJugador implements ITableroJugador {
     @Override
     public Carta removerMagiaTrampa(int pos) {
         return zonaMagiaTrampa.removerCartaDeSlot(pos);
+    }
+
+    @Override
+    public int getCantMonstrosOcupantes() {
+        return zonaMonstruos.getCantCartasOcupantes();
     }
 
     /**

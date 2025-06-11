@@ -49,6 +49,12 @@ public interface IZonaTablero<T extends Carta> {
     int getCantidadSlotsLibres();
 
     /**
+     * Obtiene la cantidad de cartas ocupantes en la zona.
+     * @return La cantidad de cartas ocupantes.
+     */
+    int getCantCartasOcupantes();
+
+    /**
      * Obtiene la carta en una posición específica de la zona.
      * @param posicion La posición de la carta a obtener.
      * @return La carta en la posición especificada, o null si la posición es inválida.

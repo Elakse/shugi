@@ -14,13 +14,9 @@ public abstract class CartaMagica extends Carta {
         this.mensajePeticion = null;
     }
 
-    //TODO: Checkear lo de revelar
-    /*@Override public void revelar() { 
-        // Lógica para revelar la carta mágica
-        System.out.println("Mágica " + nombre + " revelada."); 
-    }*/
-
     public abstract boolean activar(Tablero tablero);
+
+    public abstract boolean activar(Tablero tablero, CartaMonstruo monstruo);
 
     @Override
     public boolean esActivableADiscrecion(){

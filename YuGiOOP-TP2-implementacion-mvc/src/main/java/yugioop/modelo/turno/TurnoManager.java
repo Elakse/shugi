@@ -122,7 +122,7 @@ public class TurnoManager {
         this.invocacionNormalRealizada = false;
         this.cartaCampoActivadaEsteTurno = false;
     }
-
+    
     /**
      * Verifica si se puede invocar un monstruo en la fase actual.
      * Solo puede hacerse en fase PRINCIPAL1 y una sola vez por turno.

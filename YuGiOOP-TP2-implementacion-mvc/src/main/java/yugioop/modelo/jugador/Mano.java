@@ -38,6 +38,10 @@ public class Mano {
         this.cartas.add(c);
         this.sumarMano();
     }
+
+    public boolean tieneCarta(Carta c){
+        return this.cartas.contains(c);
+    }
     
     public void mostrarMano(){
         System.out.println();
