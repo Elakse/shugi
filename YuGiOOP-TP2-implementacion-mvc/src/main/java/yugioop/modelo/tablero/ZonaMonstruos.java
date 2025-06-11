@@ -10,16 +10,16 @@ import yugioop.modelo.carta.CartaMonstruo;
  */
 public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
     private ICasillaTablero<CartaMonstruo>[] slots;
-    private int tamanio; 
+    private Integer tamanio; 
 
     /**
      * ZonaMonstruos representa la zona donde se colocan las cartas de monstruo.
      * Tiene 5 slots para colocar cartas de monstruo.
      */
-    public ZonaMonstruos(int tamanioZona) {
+    public ZonaMonstruos(Integer tamanioZona) {
         this.tamanio = tamanioZona;
         this.slots = new CasillaMonstruo[tamanioZona];
-        for (int i = 0; i < tamanioZona; i++) {
+        for (Integer i = 0; i < tamanioZona; i++) {
             this.slots[i] = new CasillaMonstruo();
         }
     }
@@ -30,7 +30,7 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      * @return La CartaMonstruo en el slot, o null si está vacío o fuera de rango.
      */
     @Override
-    public CartaMonstruo obtenerCarta(int posicion) {
+    public CartaMonstruo obtenerCarta(Integer posicion) {
         if (posicion >= 0 && posicion < tamanio) {
             ICasillaTablero<CartaMonstruo> slot = this.slots[posicion];
             if (!slot.estaLibre()) {
@@ -41,7 +41,7 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
     }
 
     public void removerCartaMonstruo(CartaMonstruo monstruo){
-        for (int i = 0; i < tamanio; i++) {
+        for (Integer i = 0; i < tamanio; i++) {
             if (!slots[i].estaLibre() && slots[i].getOcupante() == monstruo) {
                 slots[i].removerOcupante();
                 return;
@@ -72,14 +72,14 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      * @return true si se colocó exitosamente, false si el slot está ocupado o la posición es inválida.
      */
     @Override
-    public void colocarCartaEnSlot(CartaMonstruo carta, int posicion) {
+    public void colocarCartaEnSlot(CartaMonstruo carta, Integer posicion) {
         if (posicion >= 0 && posicion < tamanio) {
             this.slots[posicion].colocarCarta(carta);
         }
         throw new IndexOutOfBoundsException("Posición inválida para la zona de monstruos: " + posicion);
     }
 
-    public void cambiarModoMonstruo(int posicionMostruo){
+    public void cambiarModoMonstruo(Integer posicionMostruo){
         if (posicionMostruo >= 0 && posicionMostruo < tamanio) {
             ICasillaTablero<CartaMonstruo> slot = this.slots[posicionMostruo];
             if (!slot.estaLibre()) {
@@ -96,20 +96,15 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      * @return El ICasillaTablero correspondiente al slot, o null si la posición es inválida.
      */
     @Override
-    public ICasillaTablero<CartaMonstruo> getSlot(int posicion) {
+    public ICasillaTablero<CartaMonstruo> getSlot(Integer posicion) {
         if (posicion >= 0 && posicion < tamanio) {
             return this.slots[posicion];
         }
         return null;
     }
 
-    /**
-     * Implementación del método de la interfaz IZonaTablero.
-     * @param posicion Posición del slot (0-4).
-     * @return La CartaMonstruo removida, o null si no había monstruo o la posición es inválida.
-     */
     @Override
-    public void removerCartaPorPosicion(int posicion) {
+    public void removerCartaPorPosicion(Integer posicion) {
         if (posicion < 0 || posicion >= tamanio) {
             throw new IndexOutOfBoundsException("Posición inválida para remover carta de la zona de monstruos: " + posicion);
         }
@@ -120,8 +115,8 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
     }
 
     @Override
-    public int getCantCartasOcupantes(){
-        int cantidadOcupantes = 0;
+    public Integer getCantCartasOcupantes(){
+        Integer cantidadOcupantes = 0;
         for (ICasillaTablero<CartaMonstruo> slot : slots) {
             if (!slot.estaLibre()) {
                 cantidadOcupantes++;
@@ -130,10 +125,6 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
         return cantidadOcupantes;
     }
     
-    /**
-     * Verifica si hay algún espacio libre en la zona de monstruos.
-     * @return true si hay al menos un espacio libre, false si todos están ocupados.
-     */
     @Override
     public boolean hayEspacioLibre() {
         for (ICasillaTablero<CartaMonstruo> slot : slots) {
@@ -145,8 +136,8 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
     }
 
     @Override
-    public int obtenerPosicionDeCarta(CartaMonstruo carta){
-        for (int i = 0; i < tamanio; i++) {
+    public Integer obtenerPosicionDeCarta(CartaMonstruo carta){
+        for (Integer i = 0; i < tamanio; i++) {
             ICasillaTablero<CartaMonstruo> slot = this.slots[i];
             if (!slot.estaLibre() && slot.getOcupante().equals(carta)) {
                 return i;
@@ -155,13 +146,9 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
         return -1; // Retorna -1 si la carta no se encuentra en ningún slot
     }
     
-    /**
-     * Obtiene la cantidad de slots disponibles en la Zona de Monstruos.
-     * @return La cantidad de slots disponibles.
-     */
     @Override
-    public int getCantidadSlotsLibres() {
-        int cantidadSlotsDisponibles = 0;
+    public Integer getCantidadSlotsLibres() {
+        Integer cantidadSlotsDisponibles = 0;
         for (ICasillaTablero<CartaMonstruo> slot : slots) {
             if (slot.estaLibre()) {
                 cantidadSlotsDisponibles++;

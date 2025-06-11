@@ -1,6 +1,6 @@
 package yugioop.modelo.jugador;
 
-import yugioop.modelo.carta.Carta;
+import yugioop.modelo.carta.*;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -58,8 +58,35 @@ public class Mano {
         return carta;
     }
 
+    public Carta obtenerCartaMonstruo(int indice){
+        Carta carta = this.cartas.get(indice);
+        if (carta.esMonstruo()){
+            return carta;
+        } else {
+            throw new IllegalArgumentException("La carta en el indice " + indice + " no es una carta monstruo");
+        }
+    }
+
+    public Carta obtenerCartaMagica(int indice){
+        Carta carta = this.cartas.get(indice);
+        if (!carta.esMonstruo() && carta.esActivableADiscrecion()){
+            return carta;
+        } else {
+            throw new IllegalArgumentException("La carta en el indice " + indice + " no es una carta mágica");
+        }
+    }
+
     public Carta obtenerCarta(int indice){
         return this.cartas.get(indice);
+    }
+
+    public Carta obtenerCartaTrampa(int indice){
+        Carta carta = this.cartas.get(indice);
+        if (!carta.esMonstruo() && !carta.esActivableADiscrecion()){
+            return carta;
+        } else {
+            throw new IllegalArgumentException("La carta en el indice " + indice + " no es una carta trampa");
+        }
     }
 
     public List<Carta> getCartas(){

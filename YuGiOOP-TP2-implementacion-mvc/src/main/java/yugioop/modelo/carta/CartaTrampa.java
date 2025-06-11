@@ -5,12 +5,17 @@ import yugioop.modelo.carta.trampas.Evento;
 
 public abstract class CartaTrampa extends Carta {
     public CartaTrampa(String nombre) { 
-        super(nombre);
+        super(nombre, false);
     }
 
     @Override
     public boolean esActivableADiscrecion(){
         return false;
+    }
+
+    @Override
+    public boolean esMonstruo(){
+        return esMonstruo;
     }
     
     public abstract void revelar();

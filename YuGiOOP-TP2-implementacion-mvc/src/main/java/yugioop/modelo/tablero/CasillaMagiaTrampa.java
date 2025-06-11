@@ -1,7 +1,5 @@
 package yugioop.modelo.tablero;
 import yugioop.modelo.carta.Carta;
-import yugioop.modelo.carta.CartaMagica;
-import yugioop.modelo.carta.CartaTrampa;
 
 /**
  * Representa una casilla en la zona de magia y trampas del tablero.

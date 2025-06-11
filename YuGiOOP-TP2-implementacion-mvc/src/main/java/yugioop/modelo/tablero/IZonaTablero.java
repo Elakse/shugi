@@ -1,7 +1,6 @@
 package yugioop.modelo.tablero;
 
 import yugioop.modelo.carta.Carta;
-import yugioop.modelo.carta.CartaMonstruo;
 
 import java.util.List;
 
@@ -16,14 +15,14 @@ public interface IZonaTablero<T extends Carta> {
      * @param posicion La posición donde colocar la carta.
      * @return true si la operación fue exitosa, false en caso contrario.
      */
-    void colocarCartaEnSlot(T carta, int posicion);
+    void colocarCartaEnSlot(T carta, Integer posicion);
     
     /**
      * Remueve una carta de un slot específico de la zona.
      * @param posicion La posición de la carta a remover.
      * @return La carta removida, o null si no había carta o la posición es inválida.
      */
-    void removerCartaPorPosicion(int posicion);
+    void removerCartaPorPosicion(Integer posicion);
     
     /**
      * Obtiene todas las cartas ocupantes de la zona.
@@ -42,31 +41,31 @@ public interface IZonaTablero<T extends Carta> {
      * @param posicion La posición de la casilla a obtener.
      * @return La casilla en la posición especificada, o null si la posición es inválida.
      */
-    ICasillaTablero<T> getSlot(int posicion);
+    ICasillaTablero<T> getSlot(Integer posicion);
 
     /**
      * Obtiene la cantidad de slots disponibles en la zona.
      * @return La cantidad de slots disponibles.
      */
-    int getCantidadSlotsLibres();
+    Integer getCantidadSlotsLibres();
 
     /**
      * Obtiene la cantidad de cartas ocupantes en la zona.
      * @return La cantidad de cartas ocupantes.
      */
-    int getCantCartasOcupantes();
+    Integer getCantCartasOcupantes();
 
     /**
      * Obtiene la carta en una posición específica de la zona.
      * @param posicion La posición de la carta a obtener.
      * @return La carta en la posición especificada, o null si la posición es inválida.
      */
-    T obtenerCarta(int posicion);
+    T obtenerCarta(Integer posicion);
 
     /**
      * Obtiene la posición de una carta específica en la zona.
      * @param carta La carta cuya posición se desea obtener.
      * @return La posición de la carta, o -1 si la carta no se encuentra en la zona.
      */
-    int obtenerPosicionDeCarta(T carta);
+    Integer obtenerPosicionDeCarta(T carta);
 }

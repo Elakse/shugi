@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ITableroJugador {
     
-    void colocarCarta(boolean esMonstruo, Carta carta, int pos);
+    void colocarCarta(boolean esMonstruo, Carta carta, Integer pos);
     
     /**
      * Obtiene la zona de monstruos del tablero.
@@ -20,7 +20,7 @@ public interface ITableroJugador {
      */
     IZonaTablero<CartaMonstruo> getZonaMonstruos();
     
-    void cambiarModoMonstruo(int posicion);
+    void cambiarModoMonstruo(Integer posicion);
 
     /**
      * Obtiene la zona de magia y trampas del tablero.
@@ -28,7 +28,7 @@ public interface ITableroJugador {
      */
     IZonaTablero<Carta> getZonaMagiaTrampa();
 
-    int obtenerPosicionMonstruo(CartaMonstruo monstruo);
+    Integer obtenerPosicionMonstruo(CartaMonstruo monstruo);
 
     List<CartaMagica> obtenerCartasMagicasActivas();
 
@@ -41,11 +41,11 @@ public interface ITableroJugador {
      * @param pos La posición (0-4) del monstruo a remover.
      * @return La CartaMonstruo removida, o null si no había monstruo o la posición es inválida.
      */
-    void removerMonstruoPorPosicion(int pos);
+    void removerMonstruoPorPosicion(Integer pos);
 
-    void removerMagicaPorPosicion(int pos);
+    void removerMagicaPorPosicion(Integer pos);
 
-    void removerTrampaPorPosicion(int pos);
+    void removerTrampaPorPosicion(Integer pos);
 
     void removerCartaMonstruo(CartaMonstruo monstruo);
 
@@ -53,15 +53,15 @@ public interface ITableroJugador {
 
     void removerCartaTrampa(CartaTrampa cartaTrampa);
 
-    CartaMonstruo obtenerCartaMonstruo(int pos);
+    CartaMonstruo obtenerCartaMonstruo(Integer pos);
 
-    CartaMagica obtenerCartaMagica(int pos);
+    CartaMagica obtenerCartaMagica(Integer pos);
 
-    CartaTrampa obtenerCartaTrampa(int pos);
+    CartaTrampa obtenerCartaTrampa(Integer pos);
 
-    void inhabilitarCartaMonstruo(int pos);
+    void inhabilitarCartaMonstruo(Integer pos);
 
-    void habilitarCartaMonstruo(int pos);
+    void habilitarCartaMonstruo(Integer pos);
 
     
 
@@ -69,7 +69,7 @@ public interface ITableroJugador {
      * Obtiene la cantidad de monstruos ocupantes en la zona de monstruos.
      * @return La cantidad de monstruos ocupantes.
      */
-    int getCantMonstrosOcupantes();
+    Integer getCantMonstrosOcupantes();
     
     /**
      * Verifica si hay espacio libre en la zona de monstruos.

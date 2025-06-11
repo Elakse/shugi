@@ -1,5 +1,7 @@
 package yugioop.modelo.carta.magicas;
 
+import java.util.Optional;
+
 import yugioop.modelo.carta.CartaMagica;
 import yugioop.modelo.jugador.ContextoJugador;
 import yugioop.modelo.mesa.MesaYugioh;
@@ -16,14 +18,22 @@ public class Equipamiento extends CartaMagica {
     }
 
     @Override
-    public void activar(MesaYugioh mesa, int objetivo) {
+    public boolean requiereObjetivo(){
+        return true;
+    }
+    
+    @Override
+    public void activar(MesaYugioh mesa, Optional<Integer> objetivo) {
+        if (!objetivo.isPresent()) {
+            throw new IllegalArgumentException("La carta Equipamiento requiere un monstruo objetivo.");
+        }
         ContextoJugador contextoActual = mesa.obtenerContextoJugadorActual();
         if(turnosRestantes == turnos){
-            mesa.cambiarAtkMontruo(contextoActual, objetivo, diferencialAtaque);
+            mesa.cambiarAtkMontruo(contextoActual, objetivo.get(), diferencialAtaque);
             contextoActual.agregarCartaMagicaActiva(this);
         }
         if(this.turnosRestantes <= 0) {
-            mesa.reestablecerAtributosMonstruo(contextoActual, objetivo);
+            mesa.reestablecerAtributosMonstruo(contextoActual, objetivo.get());
             contextoActual.removerCartaMagicaActiva(this);
         }
         this.turnosRestantes--;

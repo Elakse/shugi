@@ -2,11 +2,11 @@ package yugioop.modelo.jugador;
 
 import java.util.List;
 
-import yugioop.modelo.carta.Carta;
+import yugioop.modelo.carta.*;
 
 public class Jugador {
     private String nombre;
-    private int puntosDeVida = 8000;
+    private Integer puntosDeVida = 8000;
     private Mano mano;
     private Mazo mazo;
     private Cementerio cementerio;
@@ -26,8 +26,8 @@ public class Jugador {
     }
 
     public void descartarCartasExtra(){
-        int cantidad = this.getCantCartasEnMano();
-        int cantidadMaxima = mano.getMaxCartasEnMano();
+        Integer cantidad = this.getCantCartasEnMano();
+        Integer cantidadMaxima = mano.getMaxCartasEnMano();
         if (cantidad > cantidadMaxima) {
             this.descartarCartasAleatorias(cantidad - cantidadMaxima);
         }
@@ -37,7 +37,7 @@ public class Jugador {
         return this.nombre;
     }
 
-    public int getPuntosDeVida(){
+    public Integer getPuntosDeVida(){
         return this.puntosDeVida;
     }
 
@@ -49,7 +49,7 @@ public class Jugador {
         return this.cementerio;
     }
 
-    public void perderVida(int cantidad) {
+    public void perderVida(Integer cantidad) {
         if (cantidad < this.puntosDeVida){
             this.puntosDeVida -= cantidad;
         }
@@ -58,7 +58,7 @@ public class Jugador {
         }
     }
 
-    public void ganarVida(int cantidad) {
+    public void ganarVida(Integer cantidad) {
         this.puntosDeVida += cantidad;
         if (this.puntosDeVida > 8000){
             this.puntosDeVida = 8000;
@@ -77,15 +77,27 @@ public class Jugador {
         return this.mano;
     }
 
-    public int getCantCartasEnMazo(){
+    public CartaMonstruo obtenerCartaMonstruoMano(Integer indice){
+        return (CartaMonstruo) getMano().obtenerCartaMonstruo(indice);
+    }
+
+    public CartaTrampa obtenerCartaTrampaMano(Integer indice){
+        return (CartaTrampa) getMano().obtenerCartaTrampa(indice);
+    }
+    
+    public CartaMagica obtenerCartaMagicaMano(Integer indice){
+        return (CartaMagica) getMano().obtenerCartaMagica(indice);
+    }
+
+    public Integer getCantCartasEnMazo(){
         return this.mazo.getCantCartasEnMazo();
     }
 
-    public void robarCartasMazo(int cantidad){
+    public void robarCartasMazo(Integer cantidad){
 
         Carta c;
         if (cantidad <= this.getCantCartasEnMazo()){
-            for (int i=0; i<cantidad; i++){
+            for (Integer i=0; i<cantidad; i++){
                 c = this.mazo.tomarCarta(i);
                 this.getMano().agregarCarta(c);
             }
@@ -103,43 +115,43 @@ public class Jugador {
         this.mano.quitarCarta(this.getCartas().indexOf(carta));
     }
 
-    public Carta sacarCartaDeMano(int indice){
+    public Carta sacarCartaDeMano(Integer indice){
         Carta carta = this.mano.obtenerCarta(indice);
         this.mano.quitarCarta(indice);
         return carta;
     }
 
-    public void descartarCartasAleatorias(int cantidad) {
+    public void descartarCartasAleatorias(Integer cantidad) {
         if (cantidad > this.getCantCartasEnMano()) {
             return;
         }
-        for (int i = 0; i < cantidad; i++) {
+        for (Integer i = 0; i < cantidad; i++) {
             int indiceAleatorio = (int) (Math.random() * this.getCantCartasEnMano());
             Carta cartaDescartada = this.getMano().quitarCarta(indiceAleatorio);
             this.enviarAlCementerio(cartaDescartada);
         }
     }
     
-    public void descartarCarta(int indice) {
+    public void descartarCarta(Integer indice) {
         Carta cartaDescartada = this.getMano().quitarCarta(indice);
         this.enviarAlCementerio(cartaDescartada);
     }
 
-    public int getCantCartasEnMano(){
+    public Integer getCantCartasEnMano(){
         return this.mano.getCantCartas();
     }
 
-    public int getCantCartasEnCementerio(){
+    public Integer getCantCartasEnCementerio(){
         return this.cementerio.getCantidadCartasEnCementerio();
     }
 
-    public int robarCartasCementerio(int cantidad){
-        int faltan = 0;
+    public Integer robarCartasCementerio(Integer cantidad){
+        Integer faltan = 0;
         if(cantidad > this.getCantCartasEnCementerio()) {
             faltan = cantidad - this.getCantCartasEnCementerio();
             cantidad = this.getCantCartasEnCementerio();
         }
-        for (int i = 0; i < cantidad; i++) {
+        for (Integer i = 0; i < cantidad; i++) {
             agarrarCartaCementerio();
         }
         return faltan;
@@ -149,7 +161,7 @@ public class Jugador {
         return this.estaEnVida;
     }
 
-    public void quitarCartaDeMano(int i){
+    public void quitarCartaDeMano(Integer i){
         if (this.getMano().getCantCartas() > 0){
             this.getMano().quitarCarta(i);
         }

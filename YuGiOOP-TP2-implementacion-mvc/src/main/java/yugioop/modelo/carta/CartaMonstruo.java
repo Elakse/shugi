@@ -4,16 +4,16 @@ import yugioop.modelo.jugador.ContextoJugador;
 import yugioop.modelo.mesa.MesaYugioh;
 
 public class CartaMonstruo extends Carta {
-    private int ataque;
-    private int ataqueActual;
-    private int defensa;
-    private int defensaActual;
+    private Integer ataque;
+    private Integer ataqueActual;
+    private Integer defensa;
+    private Integer defensaActual;
     private boolean modoAtaque;
-    private int nivel;
+    private Integer nivel;
     boolean inhabilitada;
 
-    public CartaMonstruo(String nombre, int ataque, int defensa, int nivel) {
-        super(nombre);
+    public CartaMonstruo(String nombre, Integer ataque, Integer defensa, Integer nivel) {
+        super(nombre, true);
         this.ataque = ataque;
         this.ataqueActual = ataque;
         this.defensa = defensa;
@@ -23,7 +23,7 @@ public class CartaMonstruo extends Carta {
         this.inhabilitada = false; // Por defecto no está inhabilitada
     }
 
-    public int sacrificiosNecesarios() {
+    public Integer sacrificiosNecesarios() {
         if (this.nivel <= 4) {
             return 0;
         } else if (this.nivel <= 6) {
@@ -32,13 +32,18 @@ public class CartaMonstruo extends Carta {
             return 2;
         }
     }
+
+    @Override
+    public boolean esMonstruo(){
+        return esMonstruo;
+    }
     
     @Override
     public boolean esActivableADiscrecion(){
         return false;
     }
 
-    public void activar(MesaYugioh mesa, int posObjetivo) {
+    public void activar(MesaYugioh mesa, Integer posObjetivo) {
         if (estaInhabilitada()) {
             throw new IllegalStateException("El monstruo está inhabilitado.");
         }
@@ -57,7 +62,7 @@ public class CartaMonstruo extends Carta {
     }
 
     private void resolverModoAtaque(MesaYugioh mesa, ContextoJugador actual, ContextoJugador oponente, CartaMonstruo objetivo) {
-        int danio = computarAtaqueContraModoAtaque(objetivo);
+        Integer danio = computarAtaqueContraModoAtaque(objetivo);
 
         if (danio > 0) {
             // Destruyo al oponente y le hago daño
@@ -75,7 +80,7 @@ public class CartaMonstruo extends Carta {
     }
 
     private void resolverModoDefensa(MesaYugioh mesa, ContextoJugador actual, ContextoJugador oponente, CartaMonstruo objetivo) {
-        int danio = computarAtaqueContraModoDefensa(objetivo);
+        Integer danio = computarAtaqueContraModoDefensa(objetivo);
 
         if (danio > 0) {
             // Destruyo al monstruo en defensa
@@ -125,34 +130,34 @@ public class CartaMonstruo extends Carta {
         }
     }*/
 
-    public void incrementarAtkActual(int dif){
+    public void incrementarAtkActual(Integer dif){
         cambiarAtaqueActual(ataque + dif);
     }
 
-    public void reducirAtkActual(int dif){
+    public void reducirAtkActual(Integer dif){
         cambiarAtaqueActual(ataque - dif);
     }
 
-    public void incrementarDefActual(int dif){
+    public void incrementarDefActual(Integer dif){
         cambiarDefensaActual(defensa + dif);
     }
 
-    public void reducirDefActual(int dif){
+    public void reducirDefActual(Integer dif){
         cambiarDefensaActual(defensa - dif);
     }
 
-    public void cambiarAtaqueActual(int atk){
+    public void cambiarAtaqueActual(Integer atk){
         this.ataqueActual = atk;
     }
 
-    public void cambiarDefensaActual(int def){
+    public void cambiarDefensaActual(Integer def){
         this.defensaActual = def;
     }
 
-    public int computarAtaqueContraModoAtaque(CartaMonstruo monstruoAtacado) {
-        int atacanteATK = this.ataqueActual;
-        int atacadoATK = monstruoAtacado.ataqueActual;
-        int danio = 0;
+    public Integer computarAtaqueContraModoAtaque(CartaMonstruo monstruoAtacado) {
+        Integer atacanteATK = this.ataqueActual;
+        Integer atacadoATK = monstruoAtacado.ataqueActual;
+        Integer danio = 0;
         
         if (atacanteATK > atacadoATK) {
             System.out.println(monstruoAtacado.getNombre() + " ha sido destruido.");
@@ -168,10 +173,10 @@ public class CartaMonstruo extends Carta {
         return danio;
     }
     
-    public int computarAtaqueContraModoDefensa(CartaMonstruo monstruoAtacado) {
-        int atacanteATK = this.ataqueActual;
-        int atacadoDEF = monstruoAtacado.defensaActual;
-        int danio = 0;
+    public Integer computarAtaqueContraModoDefensa(CartaMonstruo monstruoAtacado) {
+        Integer atacanteATK = this.ataqueActual;
+        Integer atacadoDEF = monstruoAtacado.defensaActual;
+        Integer danio = 0;
         
         if (atacanteATK > atacadoDEF) {
             danio = 1;
@@ -211,11 +216,11 @@ public class CartaMonstruo extends Carta {
         System.out.println(this.nombre + " ha sido habilitada.");
     }
 
-    public int getAtaque() { 
+    public Integer getAtaque() { 
         return this.ataque;
     }
     
-    public int getDefensa() { 
+    public Integer getDefensa() { 
         return this.defensa; 
     }
     
@@ -227,19 +232,19 @@ public class CartaMonstruo extends Carta {
         return (this.ataqueActual != this.ataque || this.defensaActual != this.defensa);
     }
     
-    public void setAtaque(int ataque) {
+    public void setAtaque(Integer ataque) {
         this.ataque = ataque;
     }
     
-    public void setDefensa(int defensa) {
+    public void setDefensa(Integer defensa) {
         this.defensa = defensa;
     }
     
-    public int getNivel() {
+    public Integer getNivel() {
         return this.nivel;
     }
     
-    public void setNivel(int nivel) {
+    public void setNivel(Integer nivel) {
         this.nivel = nivel;
     }
 

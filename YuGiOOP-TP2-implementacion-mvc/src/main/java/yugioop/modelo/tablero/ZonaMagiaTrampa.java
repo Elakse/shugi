@@ -1,7 +1,6 @@
 package yugioop.modelo.tablero;
 import yugioop.modelo.carta.Carta;
 import yugioop.modelo.carta.CartaMagica;
-import yugioop.modelo.carta.CartaMonstruo;
 import yugioop.modelo.carta.CartaTrampa;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,23 +11,23 @@ import java.util.List;
  */
 public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
     private CasillaMagiaTrampa[] slots;
-    private int tamanio; 
+    private Integer tamanio; 
 
     /**
      * ZonaMagiaTrampa representa la zona donde se colocan las cartas mágicas y trampas.
      * Tiene 5 slots para colocar cartas mágicas o trampas.
      */
-    public ZonaMagiaTrampa(int tamanioZona) {
+    public ZonaMagiaTrampa(Integer tamanioZona) {
         this.tamanio = tamanioZona;
         this.slots = new CasillaMagiaTrampa[tamanio];
-        for (int i = 0; i < tamanio; i++) {
+        for (Integer i = 0; i < tamanio; i++) {
             this.slots[i] = new CasillaMagiaTrampa();
         }
     }
 
     @Override
-    public int getCantCartasOcupantes(){
-        int cantidadOcupantes = 0;
+    public Integer getCantCartasOcupantes(){
+        Integer cantidadOcupantes = 0;
         for (CasillaMagiaTrampa slot : slots) {
             if (!slot.estaLibre()) {
                 cantidadOcupantes++;
@@ -58,7 +57,7 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
      * @param posicion Posición del slot (0-4).
      * @return true si se colocó exitosamente, false si el slot está ocupado o la posición es inválida.
      */
-    public void colocarCartaEnSlot(Carta carta, int posicion) {
+    public void colocarCartaEnSlot(Carta carta, Integer posicion) {
         if (posicion >= 0 && posicion < tamanio) {
             this.slots[posicion].colocarCarta(carta);
         } else {
@@ -71,7 +70,7 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
      * @param posicion Posición del slot (0-4).
      * @return El CasillaMagiaTrampa correspondiente al slot, o null si la posición es inválida.
      */
-    public CasillaMagiaTrampa getSlot(int posicion) {
+    public CasillaMagiaTrampa getSlot(Integer posicion) {
         if (posicion >= 0 && posicion < tamanio) {
             return this.slots[posicion];
         }
@@ -84,7 +83,7 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
      * @return La Carta removida, o null si no había carta o la posición es inválida.
      */
     @Override
-    public void removerCartaPorPosicion(int posicion) {
+    public void removerCartaPorPosicion(Integer posicion) {
         if (posicion < 0 || posicion >= tamanio) {
             throw new IndexOutOfBoundsException("Posición inválida para remover carta de la zona de monstruos: " + posicion);
         }
@@ -95,7 +94,7 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
     }
 
     public void removerCartaMagica(CartaMagica cartaMagica){
-        for (int i = 0; i < tamanio; i++) {
+        for (Integer i = 0; i < tamanio; i++) {
             if (!slots[i].estaLibre() && slots[i].getOcupante() == cartaMagica) {
                 slots[i].removerOcupante();
                 return;
@@ -105,7 +104,7 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
     }
 
     public void removerCartaTrampa(CartaTrampa cartaTrampa){
-        for (int i = 0; i < tamanio; i++) {
+        for (Integer i = 0; i < tamanio; i++) {
             if (!slots[i].estaLibre() && slots[i].getOcupante() == cartaTrampa) {
                 slots[i].removerOcupante();
                 return;
@@ -128,8 +127,8 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
     }
 
     @Override
-    public int obtenerPosicionDeCarta(Carta carta){
-        for (int i = 0; i < tamanio; i++) {
+    public Integer obtenerPosicionDeCarta(Carta carta){
+        for (Integer i = 0; i < tamanio; i++) {
             ICasillaTablero<Carta> slot = this.slots[i];
             if (!slot.estaLibre() && slot.getOcupante().equals(carta)) {
                 return i;
@@ -143,8 +142,8 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
      * Obtiene la cantidad de slots disponibles en la Zona de Magia y Trampas.
      * @return La cantidad de slots disponibles.
      */
-    public int getCantidadSlotsLibres() {
-        int cantidadSlotsDisponibles = 0;
+    public Integer getCantidadSlotsLibres() {
+        Integer cantidadSlotsDisponibles = 0;
         for (CasillaMagiaTrampa slot : slots) {
             if (slot.estaLibre()) {
                 cantidadSlotsDisponibles++;
@@ -154,23 +153,23 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
     }
 
     
-    public Carta obtenerCarta(int posicion) {
+    public Carta obtenerCarta(Integer posicion) {
         throw new UnsupportedOperationException("Operación no soportada: se debe utilizar obtenerCartaMagica o obtenerCartaTrampa");
     }
 
-    public CartaMagica obtenerCartaMagica(int posicion) {
+    public CartaMagica obtenerCartaMagica(Integer posicion) {
         Carta carta = obtenerCarta(posicion);
         if (carta.esActivableADiscrecion()) {
             return (CartaMagica) carta;
         }
-        return null;
+        throw new IllegalStateException("La carta en la posición " + posicion + " no es una carta mágica");
     }
 
-    public CartaTrampa obtenerCartaTrampa(int posicion) {
+    public CartaTrampa obtenerCartaTrampa(Integer posicion) {
         Carta carta = obtenerCarta(posicion);
         if (!carta.esActivableADiscrecion()) {
             return (CartaTrampa) carta;
         }
-        return null;
+        throw new IllegalStateException("La carta en la posición " + posicion + " no es una carta trampa");
     }
 }

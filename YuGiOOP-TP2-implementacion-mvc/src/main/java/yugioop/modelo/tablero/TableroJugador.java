@@ -15,14 +15,14 @@ public class TableroJugador implements ITableroJugador {
     private ZonaMagiaTrampa zonaMagiaTrampa;
     private List<CartaMagica> cartasMagicasActivas;
 
-    public TableroJugador(int tamanioZona) {
+    public TableroJugador(Integer tamanioZona) {
         this.zonaMonstruos = new ZonaMonstruos(tamanioZona);
         this.zonaMagiaTrampa = new ZonaMagiaTrampa(tamanioZona);
     }
 
     
     @Override
-    public void colocarCarta(boolean esMonstruo, Carta carta, int pos) {
+    public void colocarCarta(boolean esMonstruo, Carta carta, Integer pos) {
         if (esMonstruo) {
             this.zonaMonstruos.colocarCartaEnSlot((CartaMonstruo) carta, pos);
         } else {
@@ -46,37 +46,37 @@ public class TableroJugador implements ITableroJugador {
     }
 
     @Override
-    public void cambiarModoMonstruo(int posicion) {
+    public void cambiarModoMonstruo(Integer posicion) {
         this.zonaMonstruos.cambiarModoMonstruo(posicion);;
     }
 
     @Override
-    public int obtenerPosicionMonstruo(CartaMonstruo monstruo) {
+    public Integer obtenerPosicionMonstruo(CartaMonstruo monstruo) {
         return this.zonaMonstruos.obtenerPosicionDeCarta(monstruo);
     }
 
     @Override
-    public CartaMonstruo obtenerCartaMonstruo(int pos){
+    public CartaMonstruo obtenerCartaMonstruo(Integer pos){
         return this.zonaMonstruos.obtenerCarta(pos);
     }
 
     @Override
-    public void inhabilitarCartaMonstruo(int pos){
+    public void inhabilitarCartaMonstruo(Integer pos){
         zonaMonstruos.obtenerCarta(pos).inhabilitar();
     }
 
     @Override
-    public void habilitarCartaMonstruo(int pos){
+    public void habilitarCartaMonstruo(Integer pos){
         zonaMonstruos.obtenerCarta(pos).habilitar();
     }
 
     @Override
-    public CartaMagica obtenerCartaMagica(int pos){
+    public CartaMagica obtenerCartaMagica(Integer pos){
         return this.zonaMagiaTrampa.obtenerCartaMagica(pos);
     }
 
     @Override
-    public CartaTrampa obtenerCartaTrampa(int pos){
+    public CartaTrampa obtenerCartaTrampa(Integer pos){
         return this.zonaMagiaTrampa.obtenerCartaTrampa(pos);
     }
 
@@ -96,16 +96,16 @@ public class TableroJugador implements ITableroJugador {
 
 
     @Override
-    public void removerMonstruoPorPosicion(int pos) {
+    public void removerMonstruoPorPosicion(Integer pos) {
         zonaMonstruos.removerCartaPorPosicion(pos);
     }
 
     @Override
-    public void removerMagicaPorPosicion(int pos) {
+    public void removerMagicaPorPosicion(Integer pos) {
         zonaMagiaTrampa.removerCartaPorPosicion(pos);
     }
     @Override
-    public void removerTrampaPorPosicion(int pos) {
+    public void removerTrampaPorPosicion(Integer pos) {
         zonaMagiaTrampa.removerCartaPorPosicion(pos);
     }
 
@@ -125,7 +125,7 @@ public class TableroJugador implements ITableroJugador {
     }
 
     @Override
-    public int getCantMonstrosOcupantes() {
+    public Integer getCantMonstrosOcupantes() {
         return zonaMonstruos.getCantCartasOcupantes();
     }
 

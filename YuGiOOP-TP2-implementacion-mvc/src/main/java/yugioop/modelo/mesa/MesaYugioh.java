@@ -3,17 +3,61 @@ package yugioop.modelo.mesa;
 import yugioop.modelo.jugador.*;
 import yugioop.modelo.tablero.*;
 import yugioop.modelo.carta.*;
-import yugioop.modelo.turno.TurnoManager;
+import yugioop.modelo.turno.*;
 
 public class MesaYugioh {
     private ContextoJugador contextoJugador1;
     private ContextoJugador contextoJugador2;
     private TurnoManager turnoManager;
 
-    public MesaYugioh(String nombreJugador1, String nombreJugador2, int tamanioZonas, boolean jugador1Comienza){
+    public MesaYugioh(String nombreJugador1, String nombreJugador2, Integer tamanioZonas, boolean jugador1Comienza){
         this.contextoJugador1 = new ContextoJugador(nombreJugador1, tamanioZonas);
         this.contextoJugador2 = new ContextoJugador(nombreJugador2, tamanioZonas);
         this.turnoManager = new TurnoManager(contextoJugador1.obtenerJugador(), contextoJugador2.obtenerJugador(), jugador1Comienza);
+    }
+
+    public void iniciarTurno(){
+        turnoManager.iniciarTurno(turnoManager.getJugadorActual());
+    }
+
+    public void finalizarTurno(){
+        turnoManager.avanzarTurno();
+    }
+
+    public boolean esPrimerTurno(){
+        return turnoManager.getNumeroTurnoGlobal() == 1;
+    }
+
+    public FaseTurno obtenerFaseActual(){
+        return turnoManager.getFaseActual();
+    }
+
+    public String obtenerNombreJugadorActual(){
+        return obtenerJugadorActual().getNombre();
+    }
+
+    public String obtenerNombreJugadorOponente(){
+        return obtenerJugadorOponente().getNombre();
+    }
+
+    public boolean jugadorEstaVivo(Jugador jugador){
+        return jugador.estaVivo();
+    }
+
+    public Integer obtenerVidaJugadorActual(){
+        return obtenerJugadorActual().getPuntosDeVida();
+    }
+
+    public Integer obtenerVidaJugadorOponente(){
+        return obtenerJugadorOponente().getPuntosDeVida();
+    }
+
+    public Integer obtenerCantCartasManoJugadorActual(){
+        return obtenerJugadorActual().getCantCartasEnMano();
+    }
+
+    public Integer obtenerCantCartasManoJugadorOponente(){
+        return obtenerJugadorOponente().getCantCartasEnMano();
     }
 
     public void asignarMazos(Mazo mazo1, Mazo mazo2){
@@ -41,9 +85,9 @@ public class MesaYugioh {
         return obtenerContextoJugadorActual().obtenerTableroJugador();
     }
 
-    private TableroJugador obtenerTableroJugadorOponente(){
+    /*private TableroJugador obtenerTableroJugadorOponente(){
         return obtenerContextoJugadorOponente().obtenerTableroJugador();
-    }
+    }*/
 
     public ContextoJugador obtenerContextoJugadorActual(){
         Jugador jugadorActual = obtenerJugadorActual();
@@ -63,55 +107,91 @@ public class MesaYugioh {
         }
     }
 
-    public void cambiarAtkMontruo(ContextoJugador contexto, int objetivo, int diferencialAtaque){
+    public void cambiarAtkMontruo(ContextoJugador contexto, Integer objetivo, Integer diferencialAtaque){
         contexto.obtenerCartaMonstruo(objetivo).incrementarAtkActual(diferencialAtaque);
     }
 
-    public void reestablecerAtributosMonstruo(ContextoJugador contexto, int objetivo){
+    public void jugadorActualColocaMonstruo(Integer indice, Integer posicion){
+        CartaMonstruo monstruo = obtenerContextoJugadorActual().obtenerCartaMonstruoMano(indice);
+        obtenerContextoJugadorActual().colocarCartaMonstruo(monstruo, posicion);
+    }
+
+    public void jugadorActualColocaMagica(Integer indice, Integer posicion){
+        CartaMagica magica = obtenerContextoJugadorActual().obtenerCartaMagicaMano(indice);
+        obtenerContextoJugadorActual().colocarCartaMagica(magica, posicion);
+    }
+
+    public void jugadorActualColocaTrampa(Integer indice, Integer posicion){
+        CartaTrampa trampa = obtenerContextoJugadorActual().obtenerCartaTrampaMano(indice);
+        obtenerContextoJugadorActual().colocarCartaTrampa(trampa, posicion);
+    }
+
+    public void reestablecerAtributosMonstruo(ContextoJugador contexto, Integer objetivo){
         contexto.reestablecerAtributosMonstruo(objetivo);
     }
 
-    public void atacarMonstruo(){
+    public void atacarMonstruo(Integer posicion, Integer posAtacado){
 
     }
 
-    public void activarCartaMagica(int posicion, int posObjetivo){
+    public void procesarCartasMagicasActivasJugadorActual(){
+        obtenerContextoJugadorActual().activarCartasMagicasActivas(this);
+    }
+
+    public void activarCartaMagica(Integer indice, Integer posObjetivo){
         TableroJugador tableroJugadorActual = obtenerTableroJugadorActual();
-        CartaMagica carta = tableroJugadorActual.obtenerCartaMagica(posicion);
-        carta.activar(this, posObjetivo);
+        CartaMagica carta = tableroJugadorActual.obtenerCartaMagica(indice);
+        carta.activar(this, java.util.Optional.of(posObjetivo));
     }
 
+    public boolean cartaMagicaRequiereObjetivo(Integer posicion){
+        return obtenerContextoJugadorActual().cartaMagicaRequiereObjetivo(posicion);
+    }
 
     /*public void activarCartasTrampaActivas(){
 
     }*/
 
-    public void jugadorActualPierdeVida(int danio){
+    public void jugadorActualPierdeVida(Integer danio){
         obtenerJugadorActual().perderVida(danio);
     }
 
-    public void jugadorActualRobaCartasMazo(int cantidad){
+    public void jugadorActualRobaCartasMazo(Integer cantidad){
         obtenerJugadorActual().robarCartasMazo(cantidad);
     }
 
-    public void jugadorActualRobaCartasCementerio(int cantidad){
+    public void jugadorActualRobaCartasCementerio(Integer cantidad){
         obtenerJugadorActual().robarCartasCementerio(cantidad);
     }
 
-    public void jugadorActualDescartaACementerio(int indice){
+    public void jugadorActualDescartaACementerio(Integer indice){
         obtenerJugadorActual().descartarCarta(indice);
     }
 
-    public void jugadorOponentePierdeVida(int danio){
+    public void jugadorOponentePierdeVida(Integer danio){
         obtenerJugadorOponente().perderVida(danio);
     }
 
-    public void jugadorOponenteRobaCartasMazo(int cantidad){
+    public void jugadorOponenteRobaCartasMazo(Integer cantidad){
         obtenerJugadorOponente().robarCartasMazo(cantidad);
     }
 
-    public void jugadorOponenteDescartaACementerio(int indice){
+    public void jugadorOponenteDescartaACementerio(Integer indice){
         obtenerJugadorOponente().descartarCarta(indice);
     }
 
+    public void jugadorActualDescartaCartasAleatorias(int cantidad) {
+        obtenerContextoJugadorActual().descartarCartasAleatorias(cantidad);
+    }
+
+    public void jugadorOponenteDescartaCartasAleatorias(int cantidad) {
+        obtenerContextoJugadorOponente().descartarCartasAleatorias(cantidad);
+    }
+
+    public void jugadorActualActivarCartasMagicasActivas(){
+        obtenerContextoJugadorActual().activarCartasMagicasActivas(this);
+    }
+
+    
+    
 }
