@@ -1,8 +1,8 @@
 package yugioop.modelo.carta.magicas;
 
 import yugioop.modelo.carta.CartaMagica;
-import yugioop.modelo.carta.CartaMonstruo;
-import yugioop.modelo.tablero.Tablero;
+import yugioop.modelo.jugador.ContextoJugador;
+import yugioop.modelo.mesa.MesaYugioh;
 
 public class Defensiva extends CartaMagica {
 
@@ -14,19 +14,18 @@ public class Defensiva extends CartaMagica {
     }
 
     @Override
-    public boolean activar(Tablero tablero) {
-        throw new UnsupportedOperationException("Esta carta no se puede activar sin un monstruo.");
-    }
+    public void activar(MesaYugioh mesa, int objetivo) {
 
-    @Override
-    public boolean activar(Tablero tablero, CartaMonstruo monstruo) {
-        tablero.inhabilitarCartaMonstruo(monstruo);
-        if(this.turnosRestantes > 0) {
-            this.turnosRestantes--;
-            return true;
+        ContextoJugador contextoActual = mesa.obtenerContextoJugadorActual();
+        if(turnosRestantes == turnos){
+            contextoActual.inhabilitarCartaMonstruo(objetivo);
+            contextoActual.agregarCartaMagicaActiva(this);
         }
-        else {
-            return false;
+        if(this.turnosRestantes <= 0) {
+            contextoActual.habilitarCartaMonstruo(objetivo);
+            contextoActual.removerCartaMagicaActiva(this);
+            contextoActual.destruirCartaMagica(this);
         }
+        this.turnosRestantes--;
     }
 }

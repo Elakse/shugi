@@ -1,23 +1,25 @@
 package yugioop.modelo.carta;
 
-import yugioop.modelo.tablero.Tablero;
-import yugioop.modelo.carta.magicas.Equipamiento;
+import yugioop.modelo.jugador.ContextoJugador;
+import yugioop.modelo.mesa.MesaYugioh;
 
 public class CartaMonstruo extends Carta {
     private int ataque;
+    private int ataqueActual;
     private int defensa;
+    private int defensaActual;
     private boolean modoAtaque;
     private int nivel;
-    private Equipamiento cartaMagicaEquipada;
     boolean inhabilitada;
 
     public CartaMonstruo(String nombre, int ataque, int defensa, int nivel) {
         super(nombre);
         this.ataque = ataque;
+        this.ataqueActual = ataque;
         this.defensa = defensa;
+        this.defensaActual = defensa;
         this.modoAtaque = true;
         this.nivel = nivel;
-        this.cartaMagicaEquipada = null;
         this.inhabilitada = false; // Por defecto no está inhabilitada
     }
 
@@ -36,7 +38,61 @@ public class CartaMonstruo extends Carta {
         return false;
     }
 
-    public void activar(Tablero tablero, CartaMonstruo monstruo) {
+    public void activar(MesaYugioh mesa, int posObjetivo) {
+        if (estaInhabilitada()) {
+            throw new IllegalStateException("El monstruo está inhabilitado.");
+        }
+
+        ContextoJugador actual = mesa.obtenerContextoJugadorActual();
+        ContextoJugador oponente = mesa.obtenerContextoJugadorOponente();
+        CartaMonstruo objetivo = oponente.obtenerCartaMonstruo(posObjetivo);
+
+        System.out.printf("%s ataca a %s%n", nombre, objetivo.getNombre());
+
+        if (objetivo.estaEnModoAtaque()) {
+            resolverModoAtaque(mesa, actual, oponente, objetivo);
+        } else {
+            resolverModoDefensa(mesa, actual, oponente, objetivo);
+        }
+    }
+
+    private void resolverModoAtaque(MesaYugioh mesa, ContextoJugador actual, ContextoJugador oponente, CartaMonstruo objetivo) {
+        int danio = computarAtaqueContraModoAtaque(objetivo);
+
+        if (danio > 0) {
+            // Destruyo al oponente y le hago daño
+            oponente.destruirCartaMonstruo(objetivo);
+            mesa.jugadorOponentePierdeVida(danio);
+        } else if (danio < 0) {
+            // Me destruyen a mí y recibo daño
+            actual.destruirCartaMonstruo(this);
+            mesa.jugadorActualPierdeVida(-danio);
+        } else {
+            // Empate: ambos se destruyen
+            actual.destruirCartaMonstruo(this);
+            oponente.destruirCartaMonstruo(objetivo);
+        }
+    }
+
+    private void resolverModoDefensa(MesaYugioh mesa, ContextoJugador actual, ContextoJugador oponente, CartaMonstruo objetivo) {
+        int danio = computarAtaqueContraModoDefensa(objetivo);
+
+        if (danio > 0) {
+            // Destruyo al monstruo en defensa
+            oponente.destruirCartaMonstruo(objetivo);
+        } else if (danio < 0) {
+            // Me destruyen a mí y recibo daño de penetración
+            actual.destruirCartaMonstruo(this);
+            mesa.jugadorActualPierdeVida(-danio);
+        } else {
+            // Empate: ambos se destruyen
+            actual.destruirCartaMonstruo(this);
+            oponente.destruirCartaMonstruo(objetivo);
+        }
+    }
+
+
+    /*public void activar(MesaYugioh mesa, int posObjetivo) {
         if (!this.estaInhabilitada()) {
             System.out.println(this.nombre + " ataca a " + monstruo.getNombre());
             if(monstruo.estaEnModoAtaque()) {
@@ -67,11 +123,35 @@ public class CartaMonstruo extends Carta {
         } else {
             System.out.println("El monstruo está inhabilitado.");
         }
+    }*/
+
+    public void incrementarAtkActual(int dif){
+        cambiarAtaqueActual(ataque + dif);
+    }
+
+    public void reducirAtkActual(int dif){
+        cambiarAtaqueActual(ataque - dif);
+    }
+
+    public void incrementarDefActual(int dif){
+        cambiarDefensaActual(defensa + dif);
+    }
+
+    public void reducirDefActual(int dif){
+        cambiarDefensaActual(defensa - dif);
+    }
+
+    public void cambiarAtaqueActual(int atk){
+        this.ataqueActual = atk;
+    }
+
+    public void cambiarDefensaActual(int def){
+        this.defensaActual = def;
     }
 
     public int computarAtaqueContraModoAtaque(CartaMonstruo monstruoAtacado) {
-        int atacanteATK = this.computarATK();
-        int atacadoATK = monstruoAtacado.computarATK();
+        int atacanteATK = this.ataqueActual;
+        int atacadoATK = monstruoAtacado.ataqueActual;
         int danio = 0;
         
         if (atacanteATK > atacadoATK) {
@@ -89,8 +169,8 @@ public class CartaMonstruo extends Carta {
     }
     
     public int computarAtaqueContraModoDefensa(CartaMonstruo monstruoAtacado) {
-        int atacanteATK = this.computarATK();
-        int atacadoDEF = monstruoAtacado.computarDEF();
+        int atacanteATK = this.ataqueActual;
+        int atacadoDEF = monstruoAtacado.defensaActual;
         int danio = 0;
         
         if (atacanteATK > atacadoDEF) {
@@ -101,27 +181,12 @@ public class CartaMonstruo extends Carta {
         return danio;
     }
 
-    public int computarATK() {
-        if(this.cartaMagicaEquipada != null) {
-            // Si tiene una carta mágica aplicada, se suma el diferencial de ataque
-            return this.ataque + this.cartaMagicaEquipada.getDiferencialAtaque();
-        } else {
-            // Si no tiene carta mágica aplicada, se retorna el ataque base
-            return this.ataque;
-        }
-    }
-
-    public int computarDEF() {
-        if(this.cartaMagicaEquipada != null) {
-            // Si tiene una carta mágica aplicada, se suma el diferencial de defensa
-            return this.defensa + this.cartaMagicaEquipada.getDiferencialDefensa();
-        } else {
-            // Si no tiene carta mágica aplicada, se retorna la defensa base
-            return this.defensa;
-        }
+    public void reestablecerAtributos(){
+        this.ataqueActual = ataque;
+        this.defensaActual = defensa;
     }
     
-    public void cambiarPosicion() { 
+    public void cambiarModo() { 
         // Toggling the attack mode of the monster
         this.modoAtaque = !this.modoAtaque;
         System.out.println(this.nombre + " ha cambiado a modo " + (this.modoAtaque ? "ataque." : "defensa."));
@@ -159,7 +224,7 @@ public class CartaMonstruo extends Carta {
     }
 
     public boolean tienecartaMagicaEquipada() {
-        return this.cartaMagicaEquipada != null;
+        return (this.ataqueActual != this.ataque || this.defensaActual != this.defensa);
     }
     
     public void setAtaque(int ataque) {
@@ -172,20 +237,6 @@ public class CartaMonstruo extends Carta {
     
     public int getNivel() {
         return this.nivel;
-    }
-
-    public Equipamiento getcartaMagicaEquipada() {
-        return cartaMagicaEquipada;
-    }
-
-    public void equiparCartaMagica(Equipamiento cartaMagica) {
-        this.cartaMagicaEquipada = cartaMagica;
-        System.out.println(this.nombre + " ha sido equipado con la carta mágica: " + cartaMagica.getNombre());
-    }
-
-    public void desequiparCartaMagica() {
-        this.cartaMagicaEquipada = null;
-        System.out.println(this.nombre + " ha sido desequipado de la carta mágica.");
     }
     
     public void setNivel(int nivel) {

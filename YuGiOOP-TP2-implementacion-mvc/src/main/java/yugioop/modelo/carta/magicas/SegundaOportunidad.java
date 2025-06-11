@@ -1,8 +1,8 @@
 package yugioop.modelo.carta.magicas;
 
 import yugioop.modelo.carta.CartaMagica;
-import yugioop.modelo.carta.CartaMonstruo;
-import yugioop.modelo.tablero.Tablero;
+import yugioop.modelo.jugador.ContextoJugador;
+import yugioop.modelo.mesa.MesaYugioh;
 
 public class SegundaOportunidad extends CartaMagica {
 
@@ -15,13 +15,10 @@ public class SegundaOportunidad extends CartaMagica {
     }
 
     @Override
-    public boolean activar(Tablero tablero) {
-        tablero.jugadorRobaCartasCementerio(this.cantidad);
-        return true;
+    public void activar(MesaYugioh mesa, int objetivo) {
+        mesa.jugadorActualRobaCartasCementerio(this.cantidad);
+        ContextoJugador contextoActual = mesa.obtenerContextoJugadorActual();
+        contextoActual.destruirCartaMagica(this);
     }
 
-    @Override
-    public boolean activar(Tablero tablero, CartaMonstruo monstruo){
-        throw new UnsupportedOperationException("Esta carta no se puede activar con un monstruo.");
-    }
 }

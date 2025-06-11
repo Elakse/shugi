@@ -19,14 +19,6 @@ public abstract class Carta {
         return nombre;
     }
 
-    public void revelar(){
-        this.bocaAbajo = false;
-    }
-
-    /**
-     * Verifica si la carta está boca abajo.
-     * @return true si la carta está boca abajo, false si está boca arriba.
-     */
     public boolean estaBocaAbajo() {
         return bocaAbajo;
     }
@@ -34,9 +26,9 @@ public abstract class Carta {
     public void ponerBocaAbajo() {
         this.bocaAbajo = true;
     }
-
-    public abstract TipoZona getTipoZona();
-
-    public abstract String getTipo();
+    
+    public void revelar(){
+        this.bocaAbajo = false;
+    }
 
 }

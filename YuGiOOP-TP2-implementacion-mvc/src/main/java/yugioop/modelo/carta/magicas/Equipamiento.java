@@ -1,39 +1,32 @@
 package yugioop.modelo.carta.magicas;
+
 import yugioop.modelo.carta.CartaMagica;
-import yugioop.modelo.carta.CartaMonstruo;
-import yugioop.modelo.tablero.Tablero;
+import yugioop.modelo.jugador.ContextoJugador;
+import yugioop.modelo.mesa.MesaYugioh;
 
 public class Equipamiento extends CartaMagica {
 
     private int diferencialAtaque;
     private int diferencialDefensa;
-    
 
-    public Equipamiento(String nombre, int turnos, int diferencialAtaque, int diferencialDefensa, String mensajePeticion) {
+    public Equipamiento(String nombre, int turnos, int diferencialAtaque, int diferencialDefensa) {
         super(nombre, turnos);
         this.diferencialAtaque = diferencialAtaque;
         this.diferencialDefensa = diferencialDefensa;
-        this.mensajePeticion = mensajePeticion;
     }
 
     @Override
-    public boolean activar(Tablero tablero){
-        throw new UnsupportedOperationException("Esta carta no se puede activar sin un monstruo.");
-    }
-
-    @Override
-    public boolean activar(Tablero tablero, CartaMonstruo monstruo) {
+    public void activar(MesaYugioh mesa, int objetivo) {
+        ContextoJugador contextoActual = mesa.obtenerContextoJugadorActual();
         if(turnosRestantes == turnos){
-            tablero.equiparCartaMagica(this, monstruo);
+            mesa.cambiarAtkMontruo(contextoActual, objetivo, diferencialAtaque);
+            contextoActual.agregarCartaMagicaActiva(this);
         }
-        if(this.turnosRestantes > 0) {
-            this.turnosRestantes--;
-            return true;
+        if(this.turnosRestantes <= 0) {
+            mesa.reestablecerAtributosMonstruo(contextoActual, objetivo);
+            contextoActual.removerCartaMagicaActiva(this);
         }
-        else {
-            monstruo.desequiparCartaMagica();
-            return false;
-        }
+        this.turnosRestantes--;
     }
 
     public int getDiferencialAtaque() {

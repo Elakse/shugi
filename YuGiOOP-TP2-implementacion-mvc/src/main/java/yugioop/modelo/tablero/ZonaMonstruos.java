@@ -10,15 +10,16 @@ import yugioop.modelo.carta.CartaMonstruo;
  */
 public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
     private ICasillaTablero<CartaMonstruo>[] slots;
-    private static final int CANTIDAD_SLOTS_MONSTRUO = 5; 
+    private int tamanio; 
 
     /**
      * ZonaMonstruos representa la zona donde se colocan las cartas de monstruo.
      * Tiene 5 slots para colocar cartas de monstruo.
      */
-    public ZonaMonstruos() {
-        this.slots = new CasillaMonstruo[CANTIDAD_SLOTS_MONSTRUO];
-        for (int i = 0; i < CANTIDAD_SLOTS_MONSTRUO; i++) {
+    public ZonaMonstruos(int tamanioZona) {
+        this.tamanio = tamanioZona;
+        this.slots = new CasillaMonstruo[tamanioZona];
+        for (int i = 0; i < tamanioZona; i++) {
             this.slots[i] = new CasillaMonstruo();
         }
     }
@@ -30,13 +31,23 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      */
     @Override
     public CartaMonstruo obtenerCarta(int posicion) {
-        if (posicion >= 0 && posicion < CANTIDAD_SLOTS_MONSTRUO) {
+        if (posicion >= 0 && posicion < tamanio) {
             ICasillaTablero<CartaMonstruo> slot = this.slots[posicion];
             if (!slot.estaLibre()) {
                 return slot.getOcupante();
             }
         }
         return null;
+    }
+
+    public void removerCartaMonstruo(CartaMonstruo monstruo){
+        for (int i = 0; i < tamanio; i++) {
+            if (!slots[i].estaLibre() && slots[i].getOcupante() == monstruo) {
+                slots[i].removerOcupante();
+                return;
+            }
+        }
+        throw new IllegalStateException("El monstruo a remover no se encuentra en la zona.");
     }
 
     /**
@@ -61,12 +72,22 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      * @return true si se colocó exitosamente, false si el slot está ocupado o la posición es inválida.
      */
     @Override
-    public boolean colocarCartaEnSlot(CartaMonstruo carta, int posicion) {
-        if (posicion >= 0 && posicion < CANTIDAD_SLOTS_MONSTRUO) {
-            return this.slots[posicion].colocarCarta(carta);
+    public void colocarCartaEnSlot(CartaMonstruo carta, int posicion) {
+        if (posicion >= 0 && posicion < tamanio) {
+            this.slots[posicion].colocarCarta(carta);
         }
-        System.out.println("Error: Posición inválida para la zona de monstruos.");
-        return false;
+        throw new IndexOutOfBoundsException("Posición inválida para la zona de monstruos: " + posicion);
+    }
+
+    public void cambiarModoMonstruo(int posicionMostruo){
+        if (posicionMostruo >= 0 && posicionMostruo < tamanio) {
+            ICasillaTablero<CartaMonstruo> slot = this.slots[posicionMostruo];
+            if (!slot.estaLibre()) {
+                slot.getOcupante().cambiarModo();
+            }
+        } else {
+            throw new IndexOutOfBoundsException("Posición de monstruo inválida: " + posicionMostruo);
+        }
     }
 
     /**
@@ -76,7 +97,7 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      */
     @Override
     public ICasillaTablero<CartaMonstruo> getSlot(int posicion) {
-        if (posicion >= 0 && posicion < CANTIDAD_SLOTS_MONSTRUO) {
+        if (posicion >= 0 && posicion < tamanio) {
             return this.slots[posicion];
         }
         return null;
@@ -88,11 +109,14 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      * @return La CartaMonstruo removida, o null si no había monstruo o la posición es inválida.
      */
     @Override
-    public CartaMonstruo removerCartaDeSlot(int posicion) {
-        if (posicion >= 0 && posicion < CANTIDAD_SLOTS_MONSTRUO && !this.slots[posicion].estaLibre()) {
-            return this.slots[posicion].removerOcupante();
+    public void removerCartaPorPosicion(int posicion) {
+        if (posicion < 0 || posicion >= tamanio) {
+            throw new IndexOutOfBoundsException("Posición inválida para remover carta de la zona de monstruos: " + posicion);
         }
-        return null;
+        if (this.slots[posicion].estaLibre()) {
+            throw new IllegalStateException("No hay carta para remover en el slot: " + posicion);
+        }
+        this.slots[posicion].removerOcupante();
     }
 
     @Override
@@ -122,7 +146,7 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
 
     @Override
     public int obtenerPosicionDeCarta(CartaMonstruo carta){
-        for (int i = 0; i < CANTIDAD_SLOTS_MONSTRUO; i++) {
+        for (int i = 0; i < tamanio; i++) {
             ICasillaTablero<CartaMonstruo> slot = this.slots[i];
             if (!slot.estaLibre() && slot.getOcupante().equals(carta)) {
                 return i;

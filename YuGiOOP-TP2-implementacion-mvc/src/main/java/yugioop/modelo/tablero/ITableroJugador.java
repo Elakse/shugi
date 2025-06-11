@@ -11,21 +11,8 @@ import java.util.List;
  * Interfaz que define las operaciones que un tablero de jugador debe soportar.
  */
 public interface ITableroJugador {
-    /**
-     * Intenta colocar un monstruo en una posición específica del tablero.
-     * @param cartaM La CartaMonstruo a colocar.
-     * @param pos La posición (0-4) en la zona de monstruos.
-     * @return true si el monstruo fue colocado exitosamente, false en caso contrario.
-     */
-    boolean colocarMonstruo(CartaMonstruo cartaM, int pos);
     
-    /**
-     * Intenta colocar una carta mágica o trampa en una posición específica del tablero.
-     * @param cartaMT La Carta (Mágica o Trampa) a colocar.
-     * @param pos La posición (0-4) en la zona de magia/trampa.
-     * @return true si la carta fue colocada exitosamente, false en caso contrario.
-     */
-    boolean colocarMagiaTrampa(Carta cartaMT, int pos);
+    void colocarCarta(boolean esMonstruo, Carta carta, int pos);
     
     /**
      * Obtiene la zona de monstruos del tablero.
@@ -33,17 +20,13 @@ public interface ITableroJugador {
      */
     IZonaTablero<CartaMonstruo> getZonaMonstruos();
     
+    void cambiarModoMonstruo(int posicion);
+
     /**
      * Obtiene la zona de magia y trampas del tablero.
      * @return La IZonaTablero<Carta> que representa la zona de magia y trampas.
      */
     IZonaTablero<Carta> getZonaMagiaTrampa();
-
-    CartaMonstruo obtenerCartaMonstruo(int pos);
-
-    CartaMagica obtenerCartaMagica(int pos);
-    
-    CartaTrampa obtenerCartaTrampa(int pos);
 
     int obtenerPosicionMonstruo(CartaMonstruo monstruo);
 
@@ -58,16 +41,29 @@ public interface ITableroJugador {
      * @param pos La posición (0-4) del monstruo a remover.
      * @return La CartaMonstruo removida, o null si no había monstruo o la posición es inválida.
      */
-    CartaMonstruo removerMonstruo(int pos);
+    void removerMonstruoPorPosicion(int pos);
 
-    Carta obtenerCartaMagicaTrampa(int pos);
+    void removerMagicaPorPosicion(int pos);
+
+    void removerTrampaPorPosicion(int pos);
+
+    void removerCartaMonstruo(CartaMonstruo monstruo);
+
+    void removerCartaMagica(CartaMagica cartaMagica);
+
+    void removerCartaTrampa(CartaTrampa cartaTrampa);
+
+    CartaMonstruo obtenerCartaMonstruo(int pos);
+
+    CartaMagica obtenerCartaMagica(int pos);
+
+    CartaTrampa obtenerCartaTrampa(int pos);
+
+    void inhabilitarCartaMonstruo(int pos);
+
+    void habilitarCartaMonstruo(int pos);
+
     
-    /**
-     * Remueve una carta mágica o trampa de una posición específica.
-     * @param pos La posición (0-4) de la carta a remover.
-     * @return La Carta removida, o null si no había carta o la posición es inválida.
-     */
-    Carta removerMagiaTrampa(int pos);
 
     /**
      * Obtiene la cantidad de monstruos ocupantes en la zona de monstruos.

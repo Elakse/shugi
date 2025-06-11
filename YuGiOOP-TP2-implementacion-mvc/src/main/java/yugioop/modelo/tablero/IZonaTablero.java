@@ -1,6 +1,8 @@
 package yugioop.modelo.tablero;
 
 import yugioop.modelo.carta.Carta;
+import yugioop.modelo.carta.CartaMonstruo;
+
 import java.util.List;
 
 /**
@@ -14,14 +16,14 @@ public interface IZonaTablero<T extends Carta> {
      * @param posicion La posición donde colocar la carta.
      * @return true si la operación fue exitosa, false en caso contrario.
      */
-    boolean colocarCartaEnSlot(T carta, int posicion);
+    void colocarCartaEnSlot(T carta, int posicion);
     
     /**
      * Remueve una carta de un slot específico de la zona.
      * @param posicion La posición de la carta a remover.
      * @return La carta removida, o null si no había carta o la posición es inválida.
      */
-    T removerCartaDeSlot(int posicion);
+    void removerCartaPorPosicion(int posicion);
     
     /**
      * Obtiene todas las cartas ocupantes de la zona.

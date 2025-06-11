@@ -3,7 +3,6 @@ package yugioop.modelo.jugador;
 import java.util.List;
 
 import yugioop.modelo.carta.Carta;
-import yugioop.modelo.tablero.TableroJugador;
 
 public class Jugador {
     private String nombre;
@@ -11,7 +10,6 @@ public class Jugador {
     private Mano mano;
     private Mazo mazo;
     private Cementerio cementerio;
-    private TableroJugador tableroJugador;
     private boolean estaEnVida;
 
     public Jugador(String nombre) {
@@ -19,7 +17,6 @@ public class Jugador {
         this.cementerio = new Cementerio();
         this.mano = new Mano();
         this.mazo = new Mazo();
-        this.tableroJugador = new TableroJugador();
         this.estaEnVida = true;
     }
 
@@ -38,10 +35,6 @@ public class Jugador {
 
     public String getNombre(){
         return this.nombre;
-    }
-
-    public TableroJugador getTableroJugador(){
-        return this.tableroJugador;
     }
 
     public int getPuntosDeVida(){
@@ -70,17 +63,14 @@ public class Jugador {
         if (this.puntosDeVida > 8000){
             this.puntosDeVida = 8000;
         }
-        System.out.println(nombre + " gana " + cantidad + " puntos de vida. Le quedan " + this.puntosDeVida + ".");
     }
 
     public void enviarAlCementerio(Carta carta){
         this.cementerio.agregarCartaAlCementerio(carta);
-
-        System.out.println(nombre + " envía " + carta.getNombre() + " al cementerio.");
     }
 
-    public void setMazo(Carta c){
-        this.mazo.sumarCartas(c);
+    public void setMazo(Mazo mazo){
+        this.mazo = mazo;
     }
 
     public Mano getMano(){
@@ -113,6 +103,12 @@ public class Jugador {
         this.mano.quitarCarta(this.getCartas().indexOf(carta));
     }
 
+    public Carta sacarCartaDeMano(int indice){
+        Carta carta = this.mano.obtenerCarta(indice);
+        this.mano.quitarCarta(indice);
+        return carta;
+    }
+
     public void descartarCartasAleatorias(int cantidad) {
         if (cantidad > this.getCantCartasEnMano()) {
             return;
@@ -122,6 +118,11 @@ public class Jugador {
             Carta cartaDescartada = this.getMano().quitarCarta(indiceAleatorio);
             this.enviarAlCementerio(cartaDescartada);
         }
+    }
+    
+    public void descartarCarta(int indice) {
+        Carta cartaDescartada = this.getMano().quitarCarta(indice);
+        this.enviarAlCementerio(cartaDescartada);
     }
 
     public int getCantCartasEnMano(){
