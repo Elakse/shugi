@@ -172,9 +172,29 @@ public class Jugador {
         }
     }
 
-    public List<Carta> getCartas(){
+    public List getCartas(){
         return this.mano.getCartas();
     }   
+
+    public List<CartaMonstruo> obtenerMonstruosMano(){
+        List<Carta> cartas = mano.getCartas();
+        for (int i = 0; i < cartas.size(); i++) {
+            if (!cartas.get(i).esMonstruo()) {
+                 cartas.set(i, null);
+            }
+        }
+        return (CartaMonstruo) cartas;
+    }
     
+    public List<Carta> obtenerMagicasTrampasMano(){
+        List<Carta> cartas = mano.getCartas();
+        for (int i = 0; i < cartas.size(); i++) {
+            if (cartas.get(i).esMonstruo()) {
+                 cartas.set(i, null);
+            }
+        }
+        return cartas;
+    }
+
 }
 

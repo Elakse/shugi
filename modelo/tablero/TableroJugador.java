@@ -85,6 +85,16 @@ public class TableroJugador implements ITableroJugador {
         return this.zonaMagiaTrampa.obtenerCartaTrampa(pos);
     }
 
+    @Override
+    public CartaMonstruo obtenerCartasZonaMonstruo(){
+        return this.zonaMonstruos.obtenerOcupantes();
+    }
+
+    @Override
+    public Carta obtenerCartasZonaMagiaTrampa(){
+        return this.zonaMagiaTrampa.obtenerOcupantes();
+    }
+
     /**
      * Obtiene la zona de monstruos del tablero.
      * @return La zona de monstruos como IZonaTablero<CartaMonstruo>.

@@ -66,6 +66,26 @@ public class ContextoJugador {
         tableroJugador.colocarCarta(false, carta, posicionTablero);
     }
 
+    public List<Carta> obtenerCartasMano(){
+        return jugador.getCartas();
+    }
+
+    public List<CartaMonstruo> obtenerMonstruosMano(){
+        return jugador.obtenerMonstruosMano();
+    }
+
+    public List<Carta> obtenerMagicasTrampasMano(){
+        return jugador.obtenerMagicasTrampasMano();
+    }
+
+    public List<Carta> obtenerCartasZonaMonstruo(){
+        return tableroJugador.obtenerCartasZonaMonstruo();
+    }
+
+    public List<Carta> obtenerCartasZonaMagiaTrampa(){
+        return tableroJugador.obtenerCartasZonaMagiaTrampa();
+    }
+
     public CartaMonstruo obtenerCartaMonstruo(Integer posicion){
         return tableroJugador.obtenerCartaMonstruo(posicion);
     }
@@ -133,17 +153,6 @@ public class ContextoJugador {
         }
     }
 
-    public void colocarCartaMonstruo(CartaMonstruo monstruo, Integer posicion){
-        tableroJugador.colocarCarta(true, monstruo, posicion);
-    }
-
-    public void colocarCartaMagica(CartaMagica magica, Integer posicion){
-        tableroJugador.colocarCarta(false, magica, posicion);
-    }
-
-    public void colocarCartaTrampa(CartaTrampa trampa, Integer posicion){
-        tableroJugador.colocarCarta(false, trampa, posicion);
-    }
 
     public void cambiarModoMonstruo(Integer indiceMonstruo){
         tableroJugador.cambiarModoMonstruo(indiceMonstruo);

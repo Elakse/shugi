@@ -117,8 +117,24 @@ public class MesaYugioh {
         }
     }
 
-    public List<String> obtenerNombresCartasMano(){
-        //
+    public List<Carta> obtenerMonstruosManoJugadorActual(){
+        return obtenerContextoJugadorActual().obtenerMonstruosMano();
+    }
+
+    public List<Carta> obtenerMagicasTrampasManoJugadorActual(){
+        return obtenerContextoJugadorActual().obtenerMagicasTrampasMano();
+    }
+
+    public List<Carta> obtenerCartasManoJugadorActual(){
+        return obtenerContextoJugadorActual().obtenerCartasMano();
+    }
+
+    public List<Carta> obtenerCartasZonaMonstruoJugadorActual(){
+        return obtenerContextoJugadorActual().obtenerCartasZonaMonstruo();
+    }
+
+    public List<Carta> obtenerCartasZonaMagiaTrampaJugadorActual(){
+        return obtenerContextoJugadorActual().obtenerCartasZonaMagiaTrampa();
     }
 
     public void cambiarAtkMontruo(ContextoJugador contexto, Integer objetivo, Integer diferencialAtaque){
@@ -126,18 +142,11 @@ public class MesaYugioh {
     }
 
     public void jugadorActualColocaMonstruo(Integer indice, Integer posicion){
-        CartaMonstruo monstruo = obtenerContextoJugadorActual().obtenerCartaMonstruoMano(indice);
-        obtenerContextoJugadorActual().colocarCartaMonstruo(monstruo, posicion);
+        obtenerContextoJugadorActual().colocarCartaMonstruo(indice, posicion);
     }
 
-    public void jugadorActualColocaMagica(Integer indice, Integer posicion){
-        CartaMagica magica = obtenerContextoJugadorActual().obtenerCartaMagicaMano(indice);
-        obtenerContextoJugadorActual().colocarCartaMagica(magica, posicion);
-    }
-
-    public void jugadorActualColocaTrampa(Integer indice, Integer posicion){
-        CartaTrampa trampa = obtenerContextoJugadorActual().obtenerCartaTrampaMano(indice);
-        obtenerContextoJugadorActual().colocarCartaTrampa(trampa, posicion);
+    public void jugadorActualColocaMagicaTrampa(Integer indice, Integer posicion){
+        obtenerContextoJugadorActual().colocarCartaMagicaTrampa(indice, posicion);
     }
 
     public void reestablecerAtributosMonstruo(ContextoJugador contexto, Integer objetivo){

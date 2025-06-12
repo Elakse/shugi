@@ -41,10 +41,12 @@ public class ZonaMagiaTrampa implements IZonaTablero<Carta> {
      * Obtiene una lista de las cartas mágicas y trampas ocupando los slots de la zona.
      * @return Lista de cartas mágicas y trampas ocupantes.
      */
-    public List<Carta> obtenerOcupantes() { 
+    public List<Carta> obtenerOcupantes() {
         List<Carta> ocupantes = new ArrayList<>();
         for (CasillaMagiaTrampa slot : slots) {
-            if (!slot.estaLibre()) {
+            if (slot.estaLibre()) {
+                ocupantes.add(null);
+            } else {
                 ocupantes.add(slot.getOcupante());
             }
         }

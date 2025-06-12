@@ -56,11 +56,13 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      * @return Lista de cartas de monstruo ocupantes.
      */
     @Override
-    public List<CartaMonstruo> obtenerOcupantes() { 
+    public List<CartaMonstruo> obtenerOcupantes() {
         List<CartaMonstruo> ocupantes = new ArrayList<>();
         for (ICasillaTablero<CartaMonstruo> slot : slots) {
             if (!slot.estaLibre()) {
                 ocupantes.add(slot.getOcupante());
+            } else {
+                ocupantes.add(null);
             }
         }
         return ocupantes;
