@@ -1,7 +1,8 @@
 package yugioop.modelo.mesa;
 
+import java.util.List;
+import java.util.Optional;
 import yugioop.modelo.jugador.*;
-import yugioop.modelo.tablero.*;
 import yugioop.modelo.carta.*;
 import yugioop.modelo.carta.trampas.*;
 import yugioop.modelo.turno.*;
@@ -33,6 +34,10 @@ public class MesaYugioh {
         return turnoManager.getFaseActual();
     }
 
+    public Integer obtenerCantSacrificiosMonstruo(Integer posicion){
+        return obtenerContextoJugadorActual().obtenerCantSacrificiosMonstruo(posicion);
+    }
+
     public String obtenerNombreJugadorActual(){
         return obtenerJugadorActual().getNombre();
     }
@@ -41,8 +46,12 @@ public class MesaYugioh {
         return obtenerJugadorOponente().getNombre();
     }
 
-    public boolean jugadorEstaVivo(Jugador jugador){
-        return jugador.estaVivo();
+    public boolean jugadorActualEstaVivo(Jugador jugador){
+        return obtenerJugadorActual().estaVivo();
+    }
+
+    public boolean jugadorOponenteEstaVivo(Jugador jugador){
+        return obtenerJugadorOponente().estaVivo();
     }
 
     public Integer obtenerVidaJugadorActual(){
@@ -82,9 +91,9 @@ public class MesaYugioh {
         return turnoManager.getJugadorOponente();
     }
 
-    private TableroJugador obtenerTableroJugadorActual(){
+    /*private TableroJugador obtenerTableroJugadorActual(){
         return obtenerContextoJugadorActual().obtenerTableroJugador();
-    }
+    }*/
 
     /*private TableroJugador obtenerTableroJugadorOponente(){
         return obtenerContextoJugadorOponente().obtenerTableroJugador();
@@ -106,6 +115,10 @@ public class MesaYugioh {
         } else {
             return contextoJugador2;
         }
+    }
+
+    public List<String> obtenerNombresCartasMano(){
+        //
     }
 
     public void cambiarAtkMontruo(ContextoJugador contexto, Integer objetivo, Integer diferencialAtaque){
@@ -131,18 +144,16 @@ public class MesaYugioh {
         contexto.reestablecerAtributosMonstruo(objetivo);
     }
 
-    public void atacarMonstruo(Integer posicion, Integer posAtacado){
-
+    public void atacarMonstruo(Integer posicion, Integer posObjetivo){
+        obtenerContextoJugadorActual().atacarMonstruo(this, posicion, posObjetivo);
     }
 
     public void procesarCartasMagicasActivasJugadorActual(){
         obtenerContextoJugadorActual().activarCartasMagicasActivas(this);
     }
 
-    public void activarCartaMagica(Integer indice, Integer posObjetivo){
-        TableroJugador tableroJugadorActual = obtenerTableroJugadorActual();
-        CartaMagica carta = tableroJugadorActual.obtenerCartaMagica(indice);
-        carta.activar(this, java.util.Optional.of(posObjetivo));
+    public void activarCartaMagica(Integer posicion, Optional<Integer> posObjetivo) {
+        obtenerContextoJugadorActual().activarCartaMagica(this, posicion, posObjetivo);
     }
 
     public boolean cartaMagicaRequiereObjetivo(Integer posicion){
@@ -201,7 +212,5 @@ public class MesaYugioh {
     public void jugadorActualActivarCartasMagicasActivas(){
         obtenerContextoJugadorActual().activarCartasMagicasActivas(this);
     }
-
-    
     
 }

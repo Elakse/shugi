@@ -52,8 +52,6 @@ public class CartaMonstruo extends Carta {
         ContextoJugador oponente = mesa.obtenerContextoJugadorOponente();
         CartaMonstruo objetivo = oponente.obtenerCartaMonstruo(posObjetivo);
 
-        System.out.printf("%s ataca a %s%n", nombre, objetivo.getNombre());
-
         if (objetivo.estaEnModoAtaque()) {
             resolverModoAtaque(mesa, actual, oponente, objetivo);
         } else {

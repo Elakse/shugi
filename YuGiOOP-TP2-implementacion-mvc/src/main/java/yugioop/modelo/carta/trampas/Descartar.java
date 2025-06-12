@@ -13,8 +13,10 @@ public class Descartar extends CartaTrampa {
 
     @Override
     public void activar(MesaYugioh mesa, Evento evento) {
-        if(evento == this.evento){
+        if(this.evento == evento){
+            //Explicacion: Los eventos son acciones del jugador actual, no del dueño de la carta.
             mesa.jugadorActualDescartaCartasAleatorias(cantidad);
         }
+        mesa.obtenerContextoJugadorOponente().destruirCartaTrampa(this);
     }
 }

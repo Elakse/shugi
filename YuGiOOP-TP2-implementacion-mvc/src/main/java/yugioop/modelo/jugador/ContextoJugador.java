@@ -4,6 +4,7 @@ import yugioop.modelo.tablero.TableroJugador;
 import yugioop.modelo.carta.*;
 import yugioop.modelo.carta.trampas.*;
 import java.util.List;
+import java.util.Optional;
 import yugioop.modelo.mesa.MesaYugioh;
 
 public class ContextoJugador {
@@ -102,19 +103,21 @@ public class ContextoJugador {
         tableroJugador.removerCartaMagicaActiva(cartaMagica);
     }
 
-    /*public void atacarMonstruo(int posicion, int posicionDefensor){
-        Carta monstruo = jugador.sacarCartaDeMano(posicion);
-        
-    }*/
-
-    /*public void activarCartaMagica(int posicion){
-        CartaMagica carta = tableroJugador.obtenerCartaMagica(posicion);
-        carta.activar(null)
+    public void atacarMonstruo(MesaYugioh mesa, Integer posicion, Integer posObjetivo){
+        tableroJugador.obtenerCartaMonstruo(posicion).activar(mesa, posObjetivo);
     }
 
-    public void activarCartaTrampa(){
+    public Integer obtenerCantSacrificiosMonstruo(Integer posicion){
+        return tableroJugador.obtenerCartaMonstruo(posicion).sacrificiosNecesarios();
+    }
 
-    }*/
+    public void activarCartaMagica(MesaYugioh mesa, Integer posicion, Optional<Integer> posObjetivo){
+        CartaMagica carta = tableroJugador.obtenerCartaMagica(posicion);
+        if(carta.requiereObjetivo()){
+            carta.activar(mesa, posObjetivo);
+        }
+        carta.activar(mesa, java.util.Optional.empty());
+    }
 
     public void activarCartasTrampa(MesaYugioh mesa, Evento evento){
         List<CartaTrampa> trampas = tableroJugador.obtenerCartasTrampa();

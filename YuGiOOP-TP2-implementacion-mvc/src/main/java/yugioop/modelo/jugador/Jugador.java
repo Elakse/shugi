@@ -69,8 +69,10 @@ public class Jugador {
         this.cementerio.agregarCartaAlCementerio(carta);
     }
 
-    public void setMazo(Mazo mazo){
-        this.mazo = mazo;
+    public void setMazo(Mazo mazoNuevo){
+        for (Carta carta : mazoNuevo.getCartasEnMazo()){
+            this.mazo.sumarCartas(carta);
+        }
     }
 
     public Mano getMano(){

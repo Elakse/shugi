@@ -31,13 +31,14 @@ public class ZonaMonstruos implements IZonaTablero<CartaMonstruo> {
      */
     @Override
     public CartaMonstruo obtenerCarta(Integer posicion) {
-        if (posicion >= 0 && posicion < tamanio) {
-            ICasillaTablero<CartaMonstruo> slot = this.slots[posicion];
-            if (!slot.estaLibre()) {
-                return slot.getOcupante();
-            }
+        if (posicion < 0 || posicion >= tamanio) {
+            throw new IndexOutOfBoundsException("Posición inválida: " + posicion);
         }
-        return null;
+        ICasillaTablero<CartaMonstruo> slot = this.slots[posicion];
+        if (slot.estaLibre()) {
+            throw new IllegalStateException("El slot en la posición " + posicion + " está vacío.");
+        }
+        return slot.getOcupante();
     }
 
     public void removerCartaMonstruo(CartaMonstruo monstruo){

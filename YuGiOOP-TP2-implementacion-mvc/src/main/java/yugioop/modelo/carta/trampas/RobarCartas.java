@@ -16,5 +16,6 @@ public class RobarCartas extends CartaTrampa {
         if(this.evento == evento){
             mesa.jugadorOponenteRobaCartasMazo(cantidad);
         }
+        mesa.obtenerContextoJugadorOponente().destruirCartaTrampa(this);
     }
 }

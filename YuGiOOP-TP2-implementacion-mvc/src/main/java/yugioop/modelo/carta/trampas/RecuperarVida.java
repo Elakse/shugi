@@ -16,5 +16,6 @@ public class RecuperarVida extends CartaTrampa {
         if(this.evento == evento){
             mesa.jugadorActualGanaVida(cantidad);
         }
+        mesa.obtenerContextoJugadorOponente().destruirCartaTrampa(this);
     }
 }

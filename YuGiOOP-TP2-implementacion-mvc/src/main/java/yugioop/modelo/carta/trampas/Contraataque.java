@@ -14,7 +14,9 @@ public class Contraataque extends CartaTrampa {
     @Override
     public void activar(MesaYugioh mesa, Evento evento) {
         if(this.evento == evento){
+            //Explicacion: Los eventos son acciones del jugador actual, no del dueño de la carta.
             mesa.jugadorActualPierdeVida(danio);
         }
+        mesa.obtenerContextoJugadorOponente().destruirCartaTrampa(this);
     }
 }
